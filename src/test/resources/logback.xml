@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- 
+  // Project SIX: VULN
+  // Logback Configuration
+  // @author    Akihito Nakamura, AIST
+  // @version   $Id: logback.xml 2259 2012-03-23 09:26:03Z nakamura5akihito@gmail.com $
+-->
+
+<configuration debug="true">
+    <appender name="STDOUT" 
+        class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+        <pattern>%date{ISO8601} [%thread] %-5level %logger{0}:%-4line - %msg%n</pattern>
+        <!-- pattern>%date{ISO8601} [%thread] %-5level %logger{36}:%-4line - %msg%n</pattern -->
+        </encoder>
+    </appender>
+    
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
