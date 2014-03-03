@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+                         "http://castor.org/mapping.dtd">
+
+<!-- /////////////////////////////////////////////////////////// -->
+<!-- // Project SIX: VULN                                     // -->
+<!-- //                                                       // -->
+<!-- // Castor XML Mapping Specification                      // -->
+<!-- /////////////////////////////////////////////////////////// -->
+
+<!-- @author    Akihito Nakamura, AIST -->
+<!-- @version   $Id: castor-xml_cpe-dic-2_2.xml 537 2013-04-19 02:27:39Z nakamura5akihito@gmail.com $ -->
+
+<mapping>
+
+
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.dictionary.AnyItemMetadata"
+        verify-constructable="false">
+        <map-to
+            ns-uri="http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2"
+            ns-prefix=""
+            />
+    </class>
+
+
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <!-- %  cpe-dictionary 2.2                                        % -->
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+    <class name ="jp.go.aist.six.vuln.model.scap.cpe.dictionary.ItemType">
+        <map-to xml="cpe-item"
+            ns-uri="http://cpe.mitre.org/dictionary/2.0"
+            ns-prefix=""
+            />
+<!--
+            ns-prefix=""
+-->
+        <field name="title" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.dictionary.TextType"
+            collection="collection">
+            <bind-xml name="title" node="element"/>
+        </field>
+        <field name="notes" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.dictionary.NotesType"
+            collection="collection">
+            <bind-xml name="notes" node="element"/>
+        </field>
+        <field name="references" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.dictionary.ReferencesType">
+            <bind-xml name="references" node="element"/>
+        </field>
+        <field name="check" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.dictionary.CheckType"
+            collection="collection">
+            <bind-xml name="check" node="element"/>
+        </field>
+        <field name="any" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.dictionary.metadata.ItemMetadata"
+            collection="collection">
+            <bind-xml name="meta:item-matadata" node="element"
+                xmlns:meta="http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2"
+            />
+        </field>
+<!--
+        <field name="any" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.dictionary.AnyItemMetadata"
+            collection="collection">
+            <bind-xml auto-naming="deriveByClass" node="element"/>
+        </field>
+-->
+        <field name="name" type="string">
+            <bind-xml name="name" node="attribute"/>
+        </field>
+        <field name="deprecated" type="boolean">
+            <bind-xml name="deprecated" node="attribute"/>
+        </field>
+        <field name="deprecatedBy" type="string">
+            <bind-xml name="deprecated_by" node="attribute"/>
+        </field>
+        <field name="deprecationDate" type="string">
+            <bind-xml name="deprecation_date" node="attribute"/>
+        </field>
+    </class>
+
+
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.dictionary.ListType">
+        <map-to xml="cpe-list"
+            ns-uri="http://cpe.mitre.org/dictionary/2.0"
+            ns-prefix=""
+            />
+        <field name="generator" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.dictionary.GeneratorType">
+            <bind-xml name="generator" note="element"/>
+        </field>
+        <field name="cpeItem" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.dictionary.ItemType"
+            collection="collection">
+            <bind-xml name="cpe-item" node="element"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.dictionary.TextType">
+        <map-to 
+            ns-uri="http://cpe.mitre.org/dictionary/2.0"/>
+        <field name="content" type="string">
+            <bind-xml node="text"/>
+        </field>
+        <field name="lang" type="string">
+            <bind-xml name="xml:lang" node="attribute"
+                xmlns:xml="http://www.w3.org/XML/1998/namespace"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.dictionary.NotesType">
+        <map-to 
+            ns-uri="http://cpe.mitre.org/dictionary/2.0"/>
+        <field name="note" type="string"
+            collection="collection">
+            <bind-xml name="note" node="element"/>
+        </field>
+        <field name="lang" type="string">
+            <bind-xml name="xml:lang" node="attribute"
+                xmlns:xml="http://www.w3.org/XML/1998/namespace"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.dictionary.GeneratorType">
+        <map-to 
+            ns-uri="http://cpe.mitre.org/dictionary/2.0"/>
+        <field name="productName" type="string">
+            <bind-xml name="product_name" node="element"/>
+        </field>
+        <field name="productVersion" type="string">
+            <bind-xml name="product_version" node="element"/>
+        </field>
+        <field name="schemaVersion" type="string">
+            <bind-xml name="schema_version" node="element"/>
+        </field>
+        <field name="timestamp" type="string">
+            <bind-xml name="timestamp" node="element"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.dictionary.CheckType">
+        <map-to 
+            ns-uri="http://cpe.mitre.org/dictionary/2.0"/>
+        <field name="content" type="string">
+            <bind-xml node="text"/>
+        </field>
+        <field name="system" type="string">
+            <bind-xml name="system" node="attribute"/>
+        </field>
+        <field name="href" type="string">
+            <bind-xml name="href" node="attribute"/>
+        </field>
+    </class>
+
+
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <!-- %  cpe-dictionary metadata 0.2                               % -->
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.dictionary.metadata.ItemMetadata"
+        extends="jp.go.aist.six.vuln.model.scap.cpe.dictionary.AnyItemMetadata"
+        >
+        <map-to
+            ns-uri="http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2"
+            ns-prefix="meta"
+            />
+        <field name="statusHistory" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.dictionary.metadata.StatusHistoryType">
+            <bind-xml name="status-history" node="element"/>
+        </field>
+        <field name="nvdId" type="long">
+            <bind-xml name="nvd-id" node="attribute"/>
+        </field>
+        <field name="deprecatedByNvdId" type="long">
+            <bind-xml name="deprecated-by-nvd-id" node="attribute"/>
+        </field>
+        <field name="status" type="jp.go.aist.six.vuln.model.scap.cpe.dictionary.CpeStatusEnumType">
+            <bind-xml name="status" node="attribute"/>
+        </field>
+        <field name="modificationDate" type="string">
+            <bind-xml name="modification-date" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.dictionary.metadata.StatusHistoryType">
+        <map-to 
+            ns-uri="http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2"
+            ns-prefix=""
+            />
+        <field name="status" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.dictionary.metadata.Status"
+            collection="collection">
+            <bind-xml name="status" node="element"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.dictionary.metadata.Status">
+        <map-to 
+            ns-uri="http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2"
+            ns-prefix=""
+            />
+        <field name="content" type="string">
+            <bind-xml node="text"/>
+        </field>
+        <field name="date" type="string">
+            <bind-xml name="date" node="attribute"/>
+        </field>
+    </class>
+
+</mapping>
+

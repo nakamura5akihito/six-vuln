@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ////////////////////////////////////////////////////////////////// -->
+<!-- // Project SIX: VULN                                            // -->
+<!-- //                                                              // -->
+<!-- // Spring Application Context - repository                      // -->
+<!-- ////////////////////////////////////////////////////////////////// -->
+
+<!--
+@author     Akihito Nakamura, AIST
+@version    $Id: six-vuln_context-nvd-repository.xml 527 2013-04-12 09:23:27Z nakamura5akihito@gmail.com $
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:mvc="http://www.springframework.org/schema/mvc" 
+    xsi:schemaLocation="
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context 
+      http://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/util 
+      http://www.springframework.org/schema/util/spring-util.xsd
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+    <!-- ************************************************************** -->
+    <!-- *  external contexts                                         * -->
+    <!-- ************************************************************** -->
+
+    <import resource="six-vuln_context-nvd-basic.xml"/>
+
+
+
+    <!-- ************************************************************** -->
+    <!-- *  Datastore                                                 * -->
+    <!-- ************************************************************** -->
+
+    <bean id="mongo" 
+        class="com.mongodb.Mongo">
+        <constructor-arg type="java.lang.String" value="${six.vuln.repository.database.host}"/>
+        <constructor-arg type="int" value="${six.vuln.repository.database.port}"/>
+    </bean> 
+
+
+    <bean id="morphia" 
+        class="jp.go.aist.six.util.core.repository.morphia.MorphiaFactory" 
+        factory-method="create"> 
+        <constructor-arg>
+            <set><!-- classes to map -->
+                <!-- value>#{ T(jp.go.aist.six.oval.model.definitions.DefinitionType) }</value -->
+            </set>
+        </constructor-arg>
+        <constructor-arg>
+            <set><!-- converters -->
+                <!-- value>#{ T(jp.go.aist.six.oval.core.repository.morphia.OvalConverter) }</value -->
+            </set>
+        </constructor-arg>
+    </bean>
+
+
+    <bean id="morphiaDatastore" 
+        factory-bean="morphia" 
+        factory-method="createDatastore"> 
+        <constructor-arg ref="mongo"/>
+        <constructor-arg value="${six.vuln.repository.database.name}"/>     <!-- String: database name -->
+        <constructor-arg value="${six.vuln.repository.database.username}"/> <!-- String: user name -->
+        <constructor-arg value="${six.vuln.repository.database.password}"/> <!-- String: user password -->
+    </bean>
+
+
+    <bean id="vulnerabilityDAO" 
+        class="jp.go.aist.six.vuln.core.repository.scap.nvd.morphia.VulnerabilityDAO">
+        <constructor-arg ref="morphiaDatastore"/> 
+    </bean>
+
+<!-- TODO: cpe-dic 
+-->
+    <bean id="cpeItemDAO" 
+        class="jp.go.aist.six.vuln.core.repository.scap.nvd.morphia.CpeItemDAO">
+        <constructor-arg ref="morphiaDatastore"/> 
+    </bean>
+
+
+    <bean id="nvdDatastore" 
+        class="jp.go.aist.six.vuln.core.repository.scap.nvd.morphia.NvdDatastore"> 
+        <property name="DAO">
+            <set>
+                <ref bean="vulnerabilityDAO"/>
+                <ref bean="cpeItemDAO"/>
+            </set>
+        </property>
+    </bean>
+
+
+
+    <!-- ************************************************************** -->
+    <!-- *  Repository                                                * -->
+    <!-- ************************************************************** -->
+
+    <bean id="nvdRepository" 
+        class="jp.go.aist.six.vuln.core.repository.scap.nvd.NvdRepositoryImpl">
+        <property name="datastore" ref="nvdDatastore"/>
+    </bean>
+
+</beans>

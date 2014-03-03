@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /////////////////////////////////////////////////////////// -->
+<!-- // Project SIX: VULN                                     // -->
+<!-- //                                                       // -->
+<!-- // Spring Application Context: basic                     // -->
+<!-- /////////////////////////////////////////////////////////// -->
+
+<!--
+@author     Akihito Nakamura, AIST
+@version    $Id: six-vuln_context-nvd-basic.xml 476 2013-03-07 10:35:42Z nakamura5akihito@gmail.com $
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:mvc="http://www.springframework.org/schema/mvc" 
+    xsi:schemaLocation="
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context 
+      http://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/util 
+      http://www.springframework.org/schema/util/spring-util.xsd
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+    <!-- ************************************************************** -->
+    <!-- *  external contexts                                         * -->
+    <!-- ************************************************************** -->
+    <import resource="six-vuln_context-prop.xml"/>
+    <import resource="six-vuln_context-nvd-xml.xml"/>
+
+
+</beans>

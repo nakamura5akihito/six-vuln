@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /////////////////////////////////////////////////////////// -->
+<!-- // Project SIX: VULN                                     // -->
+<!-- //                                                       // -->
+<!-- // Spring Application Context                            // -->
+<!-- /////////////////////////////////////////////////////////// -->
+
+<!--
+@author     Akihito Nakamura, AIST
+@version    $Id: six-oval_context-basic.xml 2965 2012-09-21 02:26:38Z nakamura5akihito@gmail.com $
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+    xmlns:mvc="http://www.springframework.org/schema/mvc" 
+    xsi:schemaLocation="
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context 
+      http://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/util 
+      http://www.springframework.org/schema/util/spring-util.xsd
+      http://www.springframework.org/schema/data/mongo
+      http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!-- external configuration properties for this context -->
+    <context:property-placeholder 
+        location="classpath:jp/go/aist/six/vuln/core/six-vuln_defaults.properties,classpath:six-vuln.properties"
+        ignore-resource-not-found="true"
+        system-properties-mode="OVERRIDE"
+        />
+        <!-- NOTE: 
+        location: Properties defined in later files will override properties defined earlier files, 
+            in case of overlapping keys.
+        system-properties-mode: "override" will check for a system property first, 
+            before trying the specified properties. 
+        -->
+
+
+    <!-- ************************************************************** -->
+    <!-- Properties                                                     -->
+    <!-- ************************************************************** -->
+
+    <util:properties id="six-vuln-default-properties" 
+        location="classpath:jp/go/aist/six/vuln/core/six-vuln_defaults.properties"/>
+
+    <util:properties id="six-vuln-properties" 
+        location="classpath:six-vuln.properties"/>
+
+
+
+    <!-- ************************************************************** -->
+    <!-- XML                                                            -->
+    <!-- ************************************************************** -->
+
+    <bean id="marshaller" 
+       class="org.springframework.oxm.castor.CastorMarshaller">
+        <property name="mappingLocations">
+            <list>
+                 <value>classpath:jp/go/aist/six/vuln/core/xml/castor-xml_nvd-2_0.xml</value>
+            </list>
+        </property>
+        <property name="ignoreExtraAttributes" value="false"/>
+        <property name="ignoreExtraElements"   value="false"/>
+        <property name="suppressXsiType"       value="true"/>
+        <property name="encoding"              value="UTF-8"/>
+
+<!-- TODO: Spring 3.1 supports this???
+Spring 3.0 does NOT support such a property of CastorMarshaller!!!
+-->
+        <property name="schemaLocation"
+                value="http://scap.nist.gov/schema/patch/0.1 http://nvd.nist.gov/schema/patch_0.1.xsd http://scap.nist.gov/schema/scap-core/0.1 http://nvd.nist.gov/schema/scap-core_0.1.xsd http://scap.nist.gov/schema/feed/vulnerability/2.0 http://nvd.nist.gov/schema/nvd-cve-feed_2.0.xsd"/>
+
+        <property name="namespaceMappings">
+            <map>
+                <entry key="xsi"        value="http://www.w3.org/2001/XMLSchema-instance"/>
+                <entry key="cvss"       value="http://scap.nist.gov/schema/cvss-v2/0.2"/>
+                <entry key="scap-core"  value="http://scap.nist.gov/schema/scap-core/0.1"/>
+                <entry key="cpe-lang"   value="http://cpe.mitre.org/language/2.0"/>
+                <entry key="patch"      value="http://scap.nist.gov/schema/patch/0.1"/>
+                <entry key="vuln"       value="http://scap.nist.gov/schema/vulnerability/0.4"/>
+                <entry key="cvss"       value="http://scap.nist.gov/schema/cvss-v2/0.2"/>
+                <entry key="cvss"       value="http://scap.nist.gov/schema/cvss-v2/0.2"/>
+                <!--  entry key="six-vuln" value="http://aist.go.jp/six/vuln"/  -->
+            </map>
+        </property>
+    </bean> 
+
+    <bean id="nvdXmlMapper" 
+       class="jp.go.aist.six.vuln.core.xml.NvdXmlMapper">
+        <property name="marshaller"   ref="marshaller"/>
+        <property name="unmarshaller" ref="marshaller"/>
+    </bean>
+
+
+
+    <!-- ************************************************************** -->
+    <!-- Repository                                                     -->
+    <!-- ************************************************************** -->
+
+<!--
+    <mongo:mapping-converter id="mappingConverter"
+        base-package="jp.go.aist.six.vuln.model">
+        <mongo:custom-converters base-package="jp.go.aist.six.vuln.core.repository.mongodb.converters"/>
+    </mongo:mapping-converter>
+-->
+
+    <!-- mongo:mongo host="${six.vuln.database.host}" port="${six.vuln.database.port}"/ -->
+
+    <mongo:db-factory id="mongoDbFactory" 
+        host    ="${six.vuln.database.host}" 
+        port    ="${six.vuln.database.port}"
+        dbname  ="${six.vuln.database.name}"
+        username="${six.vuln.database.username}"
+        password="${six.vuln.database.password}"
+        write-concern="SAFE"
+        />
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+        <!-- constructor-arg name="mongoConverter" ref="mappingConverter"/ -->
+
+        <!--
+        Throw an exception if the com.mongodb.WriteResult returned from any MongoDB operation 
+        contains an error.
+        -->
+        <property name="writeResultChecking" value="EXCEPTION"/>
+    </bean>
+
+    <mongo:repositories base-package="jp.go.aist.six.vuln.repository" />
+
+</beans>

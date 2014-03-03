@@ -1,0 +1,43 @@
+///////////////////////////////////////////////////////////////////////////
+Project SIX: VULN - Maven Goals
+///////////////////////////////////////////////////////////////////////////
+
+[for users]
+*compile 
+*site or javadoc:javadoc
+*package [-DskipTests]
+*install
+
+
+[for developers]
+*ant:ant
+    Generate Ant build files. Customize build.xml, not maven-build.xml.
+
+*license:{format, remove} -Dxxx=yyy
+    Helps managing license headers in source files.
+    @see https://code.google.com/p/maven-license-plugin/
+    @use src/etc/header.txt
+
+*compile 
+    Compiles the source code
+
+*test-compile
+    Compiles the test code
+*test
+
+*package [-DskipTests]
+*war:war
+    Builds a WAR file.
+*assembly:single [-DskipTests]
+    
+*javadoc:javadoc
+    Generates the test Javadoc files for the project.
+*site
+    Generates site documentation.
+*site:deploy
+    Copies the generated site documents to the remote repository.
+
+*deploy [-DskipTests]
+    Copies the final package to the remote repository.
+
+    

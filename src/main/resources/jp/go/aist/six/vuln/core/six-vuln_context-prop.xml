@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /////////////////////////////////////////////////////////// -->
+<!-- // Project SIX: VULN                                     // -->
+<!-- //                                                       // -->
+<!-- // Spring Application Context - property                 // -->
+<!-- /////////////////////////////////////////////////////////// -->
+
+<!--
+@author     Akihito Nakamura, AIST
+@version    $Id: six-vuln_context-prop.xml 625 2013-06-18 07:42:22Z nakamura5akihito@gmail.com $
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:mvc="http://www.springframework.org/schema/mvc" 
+    xsi:schemaLocation="
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context 
+      http://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/util 
+      http://www.springframework.org/schema/util/spring-util.xsd
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+    <!-- external properties -->
+    <context:property-placeholder 
+        location="classpath:jp/go/aist/six/vuln/core/six-vuln_defaults.properties,classpath:six-vuln.properties"
+        ignore-resource-not-found="true"
+        system-properties-mode="OVERRIDE"
+        />
+        <!-- NOTE: 
+        location: Properties defined in later files will override properties defined earlier files, 
+            in case of overlapping keys.
+        system-properties-mode: "override" will check for a system property first, 
+            before trying the specified properties. 
+        -->
+
+
+    <!-- ************************************************************** -->
+    <!-- *  Properties                                                * -->
+    <!-- ************************************************************** -->
+
+<!-- NOW, we use these paths as constructor arguments of SpringContext superclass.
+    If the properties file does NOT exist, e.g. classpath:six-oval.properties,
+    the Spring container throws an exception to indicate failure in creating the properties bean.
+    
+    <util:properties id="six-vuln-default-properties" 
+        location="classpath:jp/go/aist/six/vuln/core/six-vuln_defaults.properties"/>
+
+    <util:properties id="six-vuln-properties" 
+        location="classpath:six-vuln.properties"/>
+-->
+
+<!-- DO NOT USE THIS!
+    <context:property-override location="classpath:six-vuln.properties"
+        ignore-resource-not-found="true"
+        />
+-->
+
+</beans>

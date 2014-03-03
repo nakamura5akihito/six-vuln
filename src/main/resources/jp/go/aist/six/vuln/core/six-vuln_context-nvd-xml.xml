@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- /////////////////////////////////////////////////////////// -->
+<!-- // Project SIX: VULN                                     // -->
+<!-- //                                                       // -->
+<!-- // Spring Application Context - xml                      // -->
+<!-- /////////////////////////////////////////////////////////// -->
+
+<!--
+@author     Akihito Nakamura, AIST
+@version    $Id: six-vuln_context-nvd-xml.xml 539 2013-04-19 02:28:27Z nakamura5akihito@gmail.com $
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:mvc="http://www.springframework.org/schema/mvc" 
+    xsi:schemaLocation="
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context 
+      http://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/util 
+      http://www.springframework.org/schema/util/spring-util.xsd
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+    <!-- ************************************************************** -->
+    <!-- XML                                                            -->
+    <!-- ************************************************************** -->
+
+    <bean id="nvdMarshaller" 
+       class="org.springframework.oxm.castor.CastorMarshaller">
+        <property name="mappingLocations">
+            <list>
+                 <value>classpath:jp/go/aist/six/vuln/core/xml/castor-xml_nvd-2_0.xml</value>
+                 <value>classpath:jp/go/aist/six/util/core/xml/castor/castor-xml_six-util.xml</value>
+
+                 <value>classpath:jp/go/aist/six/vuln/core/xml/castor-xml_cpe-dic-2_2.xml</value>
+            </list>
+        </property>
+        <property name="ignoreExtraAttributes" value="false"/>
+        <property name="ignoreExtraElements"   value="false"/>
+        <property name="suppressXsiType"       value="true"/>
+        <property name="encoding"              value="UTF-8"/>
+
+<!-- @since Spring 3.1, schemaLocation property supported. -->
+        <property name="schemaLocation"
+                value="http://scap.nist.gov/schema/cce/0.1 http://nvd.nist.gov/schema/cce_0.1.xsd  http://cpe.mitre.org/language/2.0 http://nvd.nist.gov/schema/cpe-language_2.1.xsd  http://scap.nist.gov/schema/cve/0.1 http://nvd.nist.gov/schema/cve_0.1.xsd  http://scap.nist.gov/schema/cvss-v2/0.2 http://nvd.nist.gov/schema/cvss-v2_0.2.xsd  http://scap.nist.gov/schema/scap-core/0.1 http://nvd.nist.gov/schema/scap-core_0.1.xsd  http://scap.nist.gov/schema/patch/0.1 http://nvd.nist.gov/schema/patch_0.1.xsd  http://scap.nist.gov/schema/vulnerability/0.4 http://nvd.nist.gov/schema/vulnerability_0.4.xsd  http://scap.nist.gov/schema/feed/vulnerability/2.0 http://nvd.nist.gov/schema/nvd-cve-feed_2.0.xsd  http://cpe.mitre.org/dictionary/2.0 http://cpe.mitre.org/files/cpe-dictionary_2.2.xsd  http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2 http://nvd.nist.gov/schema/cpe-dictionary-metadata_0.2.xsd"/>
+
+        <property name="namespaceMappings">
+            <map>
+                <entry key="xsi"        value="http://www.w3.org/2001/XMLSchema-instance"/>
+                <entry key="cce"        value="http://scap.nist.gov/schema/cce/0.1"/>
+                <entry key="cpe-lang"   value="http://cpe.mitre.org/language/2.0"/>
+                <entry key="cve"        value="http://scap.nist.gov/schema/cve/0.1"/>
+                <entry key="cvss"       value="http://scap.nist.gov/schema/cvss-v2/0.2"/>
+                <entry key="scap-core"  value="http://scap.nist.gov/schema/scap-core/0.1"/>
+                <entry key="patch"      value="http://scap.nist.gov/schema/patch/0.1"/>
+                <entry key="vuln"       value="http://scap.nist.gov/schema/vulnerability/0.4"/>
+                <!--  entry key="six-vuln" value="http://aist.go.jp/six/vuln"/  -->
+
+<!-- TODO: cpe-dic -->
+                <entry key="meta"       value="http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2"/>
+            </map>
+        </property>
+    </bean> 
+
+    <bean id="nvdXmlMapper" 
+       class="jp.go.aist.six.vuln.core.xml.scap.nvd.NvdXmlMapperImpl">
+        <property name="marshaller"   ref="nvdMarshaller"/>
+        <property name="unmarshaller" ref="nvdMarshaller"/>
+    </bean>
+
+
+</beans>

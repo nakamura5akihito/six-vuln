@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapping PUBLIC "-//EXOLAB/Castor Mapping DTD Version 1.0//EN"
+                         "http://castor.org/mapping.dtd">
+
+<!-- /////////////////////////////////////////////////////////// -->
+<!-- // Project SIX: VULN                                     // -->
+<!-- //                                                       // -->
+<!-- // Castor XML Mapping Specification                      // -->
+<!-- /////////////////////////////////////////////////////////// -->
+
+<!-- @author    Akihito Nakamura, AIST -->
+<!-- @version   $Id: six-vuln-nvd_castor-xml-mapping.xml 175 2010-05-31 04:41:45Z nakamura5akihito $ -->
+
+<mapping>
+
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <!-- %  scap-core 0.1                                             % -->
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+    <class name="jp.go.aist.six.vuln.model.scap.core.TextType">
+        <field name="content" type="string">
+            <bind-xml node="text"/>
+        </field>
+        <field name="lang" type="string">
+            <bind-xml name="xml:lang" node="attribute"
+                xmlns:xml="http://www.w3.org/XML/1998/namespace"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.core.CheckReferenceType">
+<!--
+        <map-to xml="assessment_check"
+            ns-uri="http://scap.nist.gov/schema/vulnerability/0.4"/>
+-->
+            <!-- The XSD defines the following NS,
+            but the feed XML uses the above NS!!!
+            ns-uri="http://scap.nist.gov/schema/scap-core/0.1"
+            -->
+
+        <field name="system" type="string">
+            <bind-xml name="system" node="attribute"/>
+        </field>
+        <field name="href" type="string">
+            <bind-xml name="href" node="attribute"/>
+        </field>
+        <field name="name" type="string">
+            <bind-xml name="name" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.core.NotesType">
+        <field name="note" 
+            type="jp.go.aist.six.vuln.model.scap.core.TextType"
+            collection="collection">
+            <bind-xml name="note" node="element"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.core.ReferenceType"
+        extends="jp.go.aist.six.vuln.model.scap.core.TextType">
+<!--
+        <map-to xml="reference"
+            ns-uri="http://scap.nist.gov/schema/vulnerability/0.4"/>
+-->
+            <!-- The XSD defines the following NS,
+            but the feed XML uses the above NS!!!
+            ns-uri="http://scap.nist.gov/schema/scap-core/0.1"
+            -->
+
+        <field name="href" type="string">
+            <bind-xml name="href" node="attribute"/>
+        </field>
+    </class>
+
+
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <!-- %  cpe 2.0                                                   % -->
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.PlatformType">
+        <map-to
+            ns-uri="http://cpe.mitre.org/language/2.0"/>
+        <field name="title" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.TextType"
+            collection="collection">
+            <bind-xml name="title" node="element"/>
+        </field>
+        <field name="remark" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.TextType"
+            collection="collection">
+            <bind-xml name="remark" node="element"/>
+        </field>
+        <field name="logicalTest" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.LogicalTestType">
+            <bind-xml name="logical-test" node="element"/>
+        </field>
+        <field name="id" type="string">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.LogicalTestType">
+        <map-to
+            ns-uri="http://cpe.mitre.org/language/2.0"/>
+        <field name="logicalTest" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.LogicalTestType"
+            collection="collection">
+            <bind-xml name="logical-test" node="element"/>
+        </field>
+        <field name="factRef" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.FactRefType"
+            collection="collection">
+            <bind-xml name="fact-ref" node="element"/>
+        </field>
+        <field name="operator" type="jp.go.aist.six.vuln.model.scap.cpe.OperatorEnumeration">
+            <bind-xml name="operator" node="attribute"/>
+        </field>
+        <field name="negate" type="boolean">
+            <bind-xml name="negate" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.FactRefType">
+        <map-to
+            ns-uri="http://cpe.mitre.org/language/2.0"/>
+        <field name="name" type="string">
+            <bind-xml name="name" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.TextType">
+        <field name="content" type="string">
+            <bind-xml node="text"/>
+        </field>
+        <field name="lang" type="string">
+            <bind-xml name="xml:lang" node="attribute"
+                xmlns:xml="http://www.w3.org/XML/1998/namespace"/>
+        </field>
+    </class>
+
+
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <!-- %  cvss 2.0                                                  % -->
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+    <!-- NOTE: This attribute group must be mapped in each class, don't use "extends" 
+    <class name="jp.go.aist.six.vuln.model.scap.cvss.VectorAttributeGroup"
+        verify-constructable="false">
+        <field name="approximated" type="boolean">
+            <bind-xml name="approximated" node="attribute"/>
+        </field>
+    </class>
+    -->
+    
+    <class name="jp.go.aist.six.vuln.model.scap.cvss.AccessComplexityType">
+        <field name="content" type="string">
+            <bind-xml node="text"/>
+        </field>
+        <field name="approximated" type="boolean">
+            <bind-xml name="approximated" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cvss.AccessVectorType">
+        <field name="content" type="string">
+            <bind-xml node="text"/>
+        </field>
+        <field name="approximated" type="boolean">
+            <bind-xml name="approximated" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cvss.CiaType">
+        <field name="content" type="string">
+            <bind-xml node="text"/>
+        </field>
+        <field name="approximated" type="boolean">
+            <bind-xml name="approximated" node="attribute"/>
+        </field>
+    </class>
+    
+    <class name="jp.go.aist.six.vuln.model.scap.cvss.AuthenticationType">
+        <field name="content" type="string">
+            <bind-xml node="text"/>
+        </field>
+        <field name="approximated" type="boolean">
+            <bind-xml name="approximated" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cvss.RemediationLevelType">
+        <field name="content" type="string">
+            <bind-xml node="text"/>
+        </field>
+        <field name="approximated" type="boolean">
+            <bind-xml name="approximated" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cvss.ConfidenceType">
+        <field name="content" type="string">
+            <bind-xml node="text"/>
+        </field>
+        <field name="approximated" type="boolean">
+            <bind-xml name="approximated" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cvss.ExploitabilityType">
+        <field name="content" type="string">
+            <bind-xml node="text"/>
+        </field>
+        <field name="approximated" type="boolean">
+            <bind-xml name="approximated" node="attribute"/>
+        </field>
+    </class>
+
+
+    <class name="jp.go.aist.six.vuln.model.scap.cvss.MetricsType"
+        verify-constructable="false">
+        <field name="upgradedFromVersion" type="double">
+            <bind-xml name="upgraded-from-version" node="attribute"/>
+        </field>
+<!--
+        <field name="upgradedFromVersion" type="big-decimal">
+            <bind-xml name="upgraded-from-version" node="attribute"/>
+        </field>
+-->
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cvss.CvssImpactType">
+        <map-to 
+            ns-uri="http://scap.nist.gov/schema/cvss-v2/0.2"/>
+        <field name="baseMetrics" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.BaseMetricsType">
+            <bind-xml name="base_metrics" node="element"/>
+        </field>
+        <field name="environmentalMetrics" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.EnvironmentalMetricsType">
+            <bind-xml name="environmental_metrics" node="element"/>
+        </field>
+        <field name="temporalMetrics" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.TemporalMetricsType">
+            <bind-xml name="temporal_metrics" node="element"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cvss.BaseMetricsType"
+        extends="jp.go.aist.six.vuln.model.scap.cvss.MetricsType">
+        <map-to 
+            ns-uri="http://scap.nist.gov/schema/cvss-v2/0.2"/>
+        <!--
+        <field name="score" type="big-decimal">
+            <bind-xml name="score" node="element"/>
+        </field>
+        -->
+        <field name="score" type="double">
+            <bind-xml name="score" node="element"/>
+        </field>
+
+        <field name="exploitSubscore" type="double">
+            <bind-xml name="exploit-subscore" node="element"/>
+        </field>
+        <field name="impactSubscore" type="double">
+            <bind-xml name="impact-subscore" node="element"/>
+        </field>
+        <field name="accessVector" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.AccessVectorType">
+            <bind-xml name="access-vector" node="element"/>
+        </field>
+        <field name="accessComplexity" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.AccessComplexityType">
+            <bind-xml name="access-complexity" node="element"/>
+        </field>
+        <field name="authentication" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.AuthenticationType">
+            <bind-xml name="authentication" node="element"/>
+        </field>
+        <field name="confidentialityImpact" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.CiaType">
+            <bind-xml name="confidentiality-impact" node="element"/>
+        </field>
+        <field name="integrityImpact" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.CiaType">
+            <bind-xml name="integrity-impact" node="element"/>
+        </field>
+        <field name="availabilityImpact" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.CiaType">
+            <bind-xml name="availability-impact" node="element"/>
+        </field>
+
+        <field name="source" type="string">
+            <bind-xml name="source" node="element"/>
+        </field>
+        <!--
+            handler="jp.go.aist.six.vuln.core.xml.NvdDatetimeHandler"
+        -->
+        <field name="generatedOnDatetime" type="string">
+            <bind-xml name="generated-on-datetime" node="element"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cvss.EnvironmentalMetricsType"
+        extends="jp.go.aist.six.vuln.model.scap.cvss.MetricsType">
+        <map-to 
+            ns-uri="http://scap.nist.gov/schema/cvss-v2/0.2"/>
+        <field name="score" type="double">
+            <bind-xml name="score" node="element"/>
+        </field>
+
+        <field name="collateralDamagePotential" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.CollateralDamagePotentialType">
+            <bind-xml name="collateral-damage-potential" node="element"/>
+        </field>
+        <field name="targetDistribution" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.TargetDistributionType">
+            <bind-xml name="target-distribution" node="element"/>
+        </field>
+        <field name="confidentialityRequirement" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.CiaRequirementType">
+            <bind-xml name="confidentiality-requirement" node="element"/>
+        </field>
+        <field name="integrityRequirement" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.CiaRequirementType">
+            <bind-xml name="integrity-requirement" node="element"/>
+        </field>
+        <field name="availabilityRequirement" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.CiaRequirementType">
+            <bind-xml name="availability-requirement" node="element"/>
+        </field>
+
+        <field name="source" type="string">
+            <bind-xml name="source" node="element"/>
+        </field>
+        <field name="generatedOnDatetime" type="string">
+            <bind-xml name="generated-on-datetime" node="element"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.cvss.TemporalMetricsType"
+        extends="jp.go.aist.six.vuln.model.scap.cvss.MetricsType">
+        <map-to 
+            ns-uri="http://scap.nist.gov/schema/cvss-v2/0.2"/>
+        <field name="score" type="double">
+            <bind-xml name="score" node="element"/>
+        </field>
+        <field name="temporalMultiplier" type="double">
+            <bind-xml name="temporal-multiplier" node="element"/>
+        </field>
+
+        <field name="exploitability" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.ExploitabilityType">
+            <bind-xml name="exploitability" node="element"/>
+        </field>
+        <field name="remediationLevel" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.RemediationLevelType">
+            <bind-xml name="remediation-level" node="element"/>
+        </field>
+        <field name="reportConfidence" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.ConfidenceType">
+            <bind-xml name="report-confidence" node="element"/>
+        </field>
+
+        <field name="source" type="string">
+            <bind-xml name="source" node="element"/>
+        </field>
+        <field name="generatedOnDatetime" type="string">
+            <bind-xml name="generated-on-datetime" node="element"/>
+        </field>
+    </class>
+
+
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <!-- %  vulnerability 0.4                                         % -->
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+    <class name="jp.go.aist.six.vuln.model.scap.vulnerability.ToolConfigurationType">
+        <map-to 
+            ns-uri="http://scap.nist.gov/schema/vulnerability/0.4"/>
+        <field name="name" type="string">
+            <bind-xml name="name" node="element"/>
+        </field>
+        <field name="definition" 
+            type="jp.go.aist.six.vuln.model.scap.core.CheckReferenceType"
+            collection="collection">
+            <bind-xml name="definition" node="element"/>
+        </field>
+    </class>
+
+
+    <class name="jp.go.aist.six.vuln.model.scap.vulnerability.VulnerabilityType">
+        <map-to 
+            ns-uri="http://scap.nist.gov/schema/vulnerability/0.4"
+            />
+<!-- This mapping produces invalid XML.
+        <map-to xml="vulnerability"
+            ns-uri="http://scap.nist.gov/schema/vulnerability/0.4"
+            ns-prefix="vuln"/>
+-->
+        <field name="osvdbExt" 
+            type="jp.go.aist.six.vuln.model.scap.vulnerability.OsvdbExtensionType">
+            <bind-xml name="osvdb-ext" node="element"/>
+        </field>
+        <field name="vulnerableConfiguration" 
+            type="jp.go.aist.six.vuln.model.scap.cpe.PlatformType"
+            collection="collection">
+            <bind-xml name="vulnerable-configuration" node="element"/>
+        </field>
+        <field name="vulnerableSoftwareList" 
+            type="jp.go.aist.six.vuln.model.scap.vulnerability.VulnerableSoftwareType">
+            <bind-xml name="vulnerable-software-list" node="element"/>
+        </field>
+        <field name="cveId" type="string">
+            <bind-xml name="cve-id" node="element"/>
+        </field>
+        <field name="cceId" type="string">
+            <bind-xml name="cce-id" node="element"/>
+        </field>
+
+        <!--
+        Currently, we use string representation for date/time in the database.
+            handler="jp.go.aist.six.vuln.core.xml.NvdDatetimeHandler"
+        -->
+        <field name="discoveredDatetime" type="string">
+            <bind-xml name="discovered-datetime" node="element"/>
+        </field>
+        <field name="disclosureDatetime" type="string">
+            <bind-xml name="disclosure-datetime" node="element"/>
+        </field>
+        <field name="exploitPublishDatetime" type="string">
+            <bind-xml name="exploit-publish-datetime" node="element"/>
+        </field>
+        <field name="publishedDatetime" type="string">
+            <bind-xml name="published-datetime" node="element"/>
+        </field>
+        <field name="lastModifiedDatetime" type="string">
+            <bind-xml name="last-modified-datetime" node="element"/>
+        </field>
+
+        <field name="cvss" 
+            type="jp.go.aist.six.vuln.model.scap.cvss.CvssImpactType">
+            <bind-xml name="cvss" node="element"/>
+        </field>
+        <field name="securityProtection" 
+            type="jp.go.aist.six.vuln.model.scap.vulnerability.SecurityProtectionType">
+            <bind-xml name="security-protection" node="element"/>
+        </field>
+        <field name="assessmentCheck" 
+            type="jp.go.aist.six.vuln.model.scap.core.CheckReferenceType"
+            collection="collection">
+            <bind-xml name="assessment_check" node="element"/>
+        </field>
+        <field name="cwe" 
+            type="jp.go.aist.six.vuln.model.scap.vulnerability.CweReferenceType"
+            collection="collection">
+            <bind-xml name="cwe" node="element"/>
+        </field>
+        <field name="references" 
+            type="jp.go.aist.six.vuln.model.scap.vulnerability.VulnerabilityReferenceType"
+            collection="collection">
+            <bind-xml name="references" node="element"/>
+        </field>
+        <field name="fixAction" 
+            type="jp.go.aist.six.vuln.model.scap.vulnerability.FixActionType"
+            collection="collection">
+            <bind-xml name="fix_action" node="element"/>
+        </field>
+        <field name="scanner" 
+            type="jp.go.aist.six.vuln.model.scap.vulnerability.ToolConfigurationType"
+            collection="collection">
+            <bind-xml name="scanner" node="element"/>
+        </field>
+        <field name="summary" type="string">
+            <bind-xml name="summary" node="element"/>
+        </field>
+        <field name="technicalDescription" 
+            type="jp.go.aist.six.vuln.model.scap.core.ReferenceType"
+            collection="collection">
+            <bind-xml name="technical_description" node="element"/>
+        </field>
+        <field name="attackScenario" 
+            type="jp.go.aist.six.vuln.model.scap.core.ReferenceType"
+            collection="collection">
+            <bind-xml name="attack_scenario" node="element"/>
+        </field>
+        <field name="id" type="string">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+    </class>
+
+    <class name="jp.go.aist.six.vuln.model.scap.vulnerability.VulnerableSoftwareType">
+        <map-to xml="vulnerable-software"
+            ns-uri="http://scap.nist.gov/schema/vulnerability/0.4"/>
+        <field name="product" type="string"
+            collection="collection">
+            <bind-xml name="product" node="element"/>
+        </field>
+    </class>
+    
+<!--
+    <class name="jp.go.aist.six.vuln.model.scap.cpe.CpeName">
+        <map-to xml="product"
+            ns-uri="http://scap.nist.gov/schema/vulnerability/0.4"/>
+
+        <field name="name" type="string">
+            <bind-xml node="text"/>
+        </field>
+    </class>
+-->
+
+    <class name="jp.go.aist.six.vuln.model.scap.vulnerability.CweReferenceType">
+        <map-to xml="cwe"
+            ns-uri="http://scap.nist.gov/schema/vulnerability/0.4"/>
+        <field name="id" type="string">
+            <bind-xml name="id" node="attribute"/>
+        </field>
+    </class>
+    
+    <class name="jp.go.aist.six.vuln.model.scap.vulnerability.VulnerabilityReferenceType">
+        <map-to
+            ns-uri="http://scap.nist.gov/schema/vulnerability/0.4"/>
+        <field name="source" type="string">
+            <bind-xml name="source" node="element"/>
+        </field>
+        <field name="reference" 
+            type="jp.go.aist.six.vuln.model.scap.core.ReferenceType">
+            <bind-xml name="reference" node="element"/>
+        </field>
+        <field name="notes" 
+            type="jp.go.aist.six.vuln.model.scap.core.NotesType">
+            <bind-xml name="notes" node="element"/>
+        </field>
+        <field name="lang" type="string">
+            <bind-xml name="xml:lang" node="attribute"
+                xmlns:xml="http://www.w3.org/XML/1998/namespace"/>
+        </field>
+        <field name="referenceType" 
+            type="jp.go.aist.six.vuln.model.scap.vulnerability.VulnerabilityReferenceCategoryEnumType">
+            <bind-xml name="reference_type" node="attribute"/>
+        </field>
+        <field name="deprecated" type="boolean">
+            <bind-xml name="deprecated" node="attribute"/>
+        </field>
+    </class>
+    
+
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+    <!-- %  nvd 2.0                                                   % -->
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+    <class name="jp.go.aist.six.vuln.model.scap.nvd.Nvd">
+        <map-to xml="nvd"
+            ns-uri="http://scap.nist.gov/schema/feed/vulnerability/2.0"/>
+        <field name="entry" 
+            type="jp.go.aist.six.vuln.model.scap.vulnerability.VulnerabilityType"
+            collection="collection">
+            <bind-xml name="entry" node="element"/>
+        </field>
+        <field name="nvdXmlVersion" type="double">
+            <bind-xml name="nvd_xml_version" node="attribute"/>
+        </field>
+        <field name="pubDate" type="string">
+            <bind-xml name="pub_date" node="attribute"/>
+        </field>
+    </class>
+
+</mapping>
+

@@ -1,0 +1,584 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+<!--
+Project SIX: VULN - Maven Project Object Model (POM) 
+
+@author     Akihito Nakamura, AIST
+@version    $Id: pom.xml 633 2013-06-28 07:55:34Z nakamura5akihito@gmail.com $
+-->
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>jp.go.aist.six.vuln</groupId>
+    <artifactId>six-vuln</artifactId>
+    <version>1.2.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <name>SIX VULN</name>
+    <description>SIX VULN provides applications with direct access to vulnerability databases and assessment services.</description>
+    <url>http://code.google.com/p/six-vuln/</url>
+    <inceptionYear>2006</inceptionYear>
+
+    <organization>
+        <name>National Institute of Advanced Industrial Science and Technology (AIST)</name>
+        <url>http://www.aist.go.jp</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <!-- GitHub -->
+        <connection>scm:git:git@github.com:nakamura5akihito/six-vuln.git</connection>
+        <developerConnection>scm:git:git@github.com:nakamura5akihito/six-vuln.git</developerConnection>
+        <url>git@github.com:nakamura5akihito/six-vuln.git</url>
+
+        <!-- deprecated: Google Code settings 
+        <connection>scm:svn:http://six-vuln.googlecode.com/svn/trunk</connection>
+        <developerConnection>scm:svn:https://six-vuln.googlecode.com/svn/trunk</developerConnection>
+        <url>http://code.google.com/p/six-vuln/source/browse/</url>
+        -->
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/nakamura5akihito/six-vuln/issues</url>
+
+        <!-- deprecated: Google Code settings 
+        <system>Google Code</system>
+        <url>http://code.google.com/p/six-vuln/issues/list</url>
+        -->
+    </issueManagement>
+
+    <developers>
+        <developer>
+            <id>nakamura5akihito</id>
+            <name>Aki Nakamura</name>
+            <email>nakamura5akihito@gmail.com</email>
+        </developer>
+    </developers>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Maven plugins -->
+        <maven-ant-plugin.version>2.3</maven-ant-plugin.version>
+        <maven-apt-plugin.version>1.0.4</maven-apt-plugin.version>
+        <maven-assembly-plugin.version>2.4</maven-assembly-plugin.version>
+        <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+        <maven-deploy-plugin.version>2.8.1</maven-deploy-plugin.version>
+        <maven-gpg-plugin.version>1.4</maven-gpg-plugin.version>
+        <maven-jar-plugin.version>2.4</maven-jar-plugin.version>
+        <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
+        <maven-resources-plugin.version>2.6</maven-resources-plugin.version>
+        <maven-site-plugin.version>3.3</maven-site-plugin.version>
+        <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+        <maven-war-plugin.version>2.3</maven-war-plugin.version>
+        <com.mycila.maven-license-plugin.version>1.9.0</com.mycila.maven-license-plugin.version>
+
+        <!-- Java libraries -->
+        <ch.qos.logback.version>1.1.0</ch.qos.logback.version>
+        <juint.version>4.11</juint.version>
+        <org.mongodb.morphia.version>0.106</org.mongodb.morphia.version>
+        <org.codehaus.castor.version>1.3.2</org.codehaus.castor.version>
+        <org.slf4j.version>1.7.5</org.slf4j.version>
+        <org.springframework.version>3.2.4.RELEASE</org.springframework.version>
+        <javax.servlet.version>2.5</javax.servlet.version>
+
+        <six-util.version>3.7.1</six-util.version>
+        <!-- six-util.version>3.5.0-SNAPSHOT</six-util.version -->
+
+<!-- pending... Now, we use GitHub Morphia for repository implementation.
+        <spring.mongodb.version>1.2.0.RELEASE</spring.mongodb.version>
+        <querydsl.version>2.9.0</querydsl.version>
+-->
+    </properties>
+
+
+    <!-- ============================================================= -->
+    <!-- Avoid release repositories/pluginRepositories:
+    http://blog.sonatype.com/2009/02/why-putting-repositories-in-your-poms-is-a-bad-idea/
+    <repositories>
+    </repositories>
+
+    <pluginRepositories>
+    </pluginRepositories>
+    -->
+
+
+    <!-- ============================================================= -->
+    <dependencies>
+    <!-- ============================================================= -->
+
+        <!-- unit test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${juint.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${org.slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${ch.qos.logback.version}</version>
+
+            <!-- NOTE: Uncomment this scope if you want to include logback JARs in WAR -->
+            <!-- scope>test</scope --> 
+            
+            <!-- NOTE: transitive dependencies: logback-core -->
+        </dependency>
+        <!-- pending... Is this necessary for mysema querydsl??? 
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>  
+            <version>${slf4j.version}</version>
+        </dependency>
+        -->
+
+        <!-- Castor 
+        castor-xml: indirect dependency from six-util 
+        -->
+
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${org.springframework.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+        <dependency>
+            <!-- to include org.springframework.web.servlet.DispatcherServlet -->
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${org.springframework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+<!-- pending...
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
+            <version>${spring.mongodb.version}</version>
+        </dependency>
+-->
+
+        <!-- Morphia on GitHub -->
+        <dependency>
+            <groupId>org.mongodb.morphia</groupId>
+            <artifactId>morphia</artifactId>
+            <version>${org.mongodb.morphia.version}</version>
+        </dependency>
+
+        <!-- Servlet -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>${javax.servlet.version}</version>
+        </dependency>
+
+        <!-- SIX -->
+        <dependency>
+            <groupId>jp.go.aist.six.util</groupId>
+            <artifactId>six-util</artifactId>
+            <version>${six-util.version}</version>
+        </dependency>
+
+<!-- TODO: Check if this artifact is necessary!!!
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.2</version>
+            <scope>test</scope>
+        </dependency>
+-->
+
+<!-- Querydsl ...pending 
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-apt</artifactId>
+            <version>${querydsl.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mysema.querydsl</groupId>
+            <artifactId>querydsl-mongodb</artifactId>
+            <version>${querydsl.version}</version>
+            
+            !-
+            <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.code.morphia</groupId>
+                    <artifactId>morphia</artifactId>
+                </exclusion>
+            </exclusions>
+            -
+        </dependency>
+        -->
+
+    </dependencies>
+
+
+    <profiles>
+        <profile>
+            <id>release-sign-artifacts</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven-gpg-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
+    <!-- ============================================================= -->
+    <build>
+    <!-- ============================================================= -->
+        <finalName>${project.artifactId}-${project.version}</finalName>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                    <exclude>**/.svn/**</exclude>
+                </excludes>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                    <exclude>**/.svn/**</exclude>
+                </excludes>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </testResource>
+        </testResources>
+
+
+        <!-- ######################################################### -->
+        <plugins>
+        <!-- ######################################################### -->
+
+            <!-- Assembles a distributionn archive including all the deliverables. -->
+            <!-- Usage: mvn assembly:assembly -DdescriptorId=bin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>${maven-assembly-plugin.version}</version>
+                <configuration>
+                    <descriptor>src/main/assembly/distribution.xml</descriptor>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ant-plugin</artifactId>
+                <version>${maven-ant-plugin.version}</version>
+                <configuration>
+                    <!-- your configuration here -->
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                    <debug>true</debug>
+                    <debuglevel>lines,vars,source</debuglevel>
+                    <encoding>UTF-8</encoding>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+
+            <!-- Deploys the artifact to the repository. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven-deploy-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.code.maven-svn-wagon</groupId>
+                        <artifactId>maven-svn-wagon</artifactId>
+                        <version>1.4</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+                <configuration>
+                    <finalName>${project.artifactId}-${project.version}</finalName>
+                    <archive>
+                        <index>true</index>
+                        <manifest>
+                            <addClasspath>false</addClasspath>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                        
+                        <manifestEntries>
+                            <Built-On>${maven.build.timestamp}</Built-On>
+                            <Built-By>Aki Nakamura (nakamura5akihito@gmail.com)</Built-By>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <configuration>
+                    <source>1.5</source>
+                    <author>true</author>
+                    <version>true</version>
+                    <use>true</use>
+                    <showPackage>false</showPackage>
+                    <encoding>UTF-8</encoding>
+                    <docencoding>UTF-8</docencoding>
+                    <locale>en_US</locale>
+                    <!-- charset>Windows-31J</charset -->
+                    <windowtitle>${project.name} ${project.version}</windowtitle>
+                    <doctitle>${project.name} ${project.version} API Specification</doctitle>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Appends license header in source code. -->
+            <!-- Usage: mvn license:{format, remove} -Dxxx=yyy -->
+            <plugin>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>${com.mycila.maven-license-plugin.version}</version>
+                <configuration>
+                    <header>src/etc/header.txt</header>
+                    <includes>
+                        <include>src/main/java/**/*.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>src/main/java/**/package-info.java</exclude>
+                    </excludes>
+                    <properties>
+                        <name>${project.name}</name>
+                        <url>${project.url}</url>
+                        <year>${project.inceptionYear}</year>
+                        <organization>${project.organization.name}</organization>
+                        <reg-number>H20PRO-863</reg-number>
+                    </properties>
+                    <strictCheck>true</strictCheck>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${maven-site-plugin.version}</version>
+                <!--
+                <configuration>
+                    <locales>en_US</locales>
+                    <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
+                </configuration>
+                -->
+                <dependencies>
+                    <dependency>
+                        <groupId>com.google.code.maven-svn-wagon</groupId>
+                        <artifactId>maven-svn-wagon</artifactId>
+                        <version>1.4</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
+            </plugin>
+
+            <!-- Querydsl ...pending
+            <plugin>
+                <groupId>com.mysema.maven</groupId>
+                <artifactId>maven-apt-plugin</artifactId>
+                <version>${maven-apt-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/generated-sources/java</outputDirectory>
+                            <processor>org.springframework.data.mongodb.repository.support.MongoAnnotationProcessor</processor>
+                        </configuration>
+                    </execution>
+                </executions>            
+            </plugin>
+            -->
+        </plugins>
+    </build>
+
+
+    <!-- ============================================================= -->
+    <reporting>
+    <!-- ============================================================= -->
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <configuration>
+                    <source>1.5</source>
+                    <author>true</author>
+                    <version>true</version>
+                    <use>true</use>
+                    <showPackage>false</showPackage>
+                    <encoding>UTF-8</encoding>
+                    <docencoding>UTF-8</docencoding>
+                    <locale>en_US</locale>
+                    <!-- charset>Windows-31J</charset -->
+                    <windowtitle>${project.name} ${project.version}</windowtitle>
+                    <doctitle>${project.name} ${project.version} API Specification</doctitle>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <id>default</id>
+                        <configuration>
+                        </configuration>
+                        <reports>
+                            <report>javadoc</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
+
+    <!-- ============================================================= -->
+<!-- deprecated: Sonatype repository is defined in the parent POM.
+     See https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-7a.1.POMandsettingsconfig
+    <distributionManagement>
+        <repository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>six-vuln.googlecode</id>
+            <url>svn:https://six-vuln.googlecode.com/svn/maven</url>
+        </repository>
+        <snapshotRepository>
+            <uniqueVersion>false</uniqueVersion>
+            <id>six-vuln.googlecode</id>
+            <url>svn:https://six-vuln.googlecode.com/svn/maven</url>
+        </snapshotRepository>
+
+        <site>
+            <id>six-vuln.googlecode</id>
+            <url>svn:https://six-vuln.googlecode.com/svn/site</url>
+        </site>    
+    </distributionManagement>
+-->
+
+</project>

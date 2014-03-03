@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ////////////////////////////////////////////////////////////////// -->
+<!-- // Project SIX: VULN                                            // -->
+<!-- //                                                              // -->
+<!-- // Spring Application Context - NVD Web client                  // -->
+<!-- ////////////////////////////////////////////////////////////////// -->
+
+<!--
+@author     Akihito Nakamura, AIST
+@version    $Id: six-vuln_context-nvd-web-client.xml 610 2013-06-13 07:58:19Z nakamura5akihito@gmail.com $
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:mvc="http://www.springframework.org/schema/mvc" 
+    xsi:schemaLocation="
+      http://www.springframework.org/schema/beans 
+      http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context 
+      http://www.springframework.org/schema/context/spring-context.xsd
+      http://www.springframework.org/schema/util 
+      http://www.springframework.org/schema/util/spring-util.xsd
+      http://www.springframework.org/schema/mvc
+      http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+    <!-- ************************************************************** -->
+    <!-- *  external contexts                                         * -->
+    <!-- ************************************************************** -->
+    <import resource="six-vuln_context-nvd-basic.xml"/>
+    <import resource="six-vuln_context-nvd-web.xml"/>
+
+
+
+    <!-- ************************************************************** -->
+    <!-- *  client stub                                               * -->
+    <!-- ************************************************************** -->
+
+    <bean id="http-client" 
+        class="jp.go.aist.six.util.core.web.spring.SpringHttpClientImpl"> 
+        <property name="messageConverters"> 
+            <list> 
+                <ref bean="nvdMarshallingConverter" /> 
+            </list> 
+        </property>
+    </bean> 
+
+    <bean id="http-nvd-repository-client" 
+        class="jp.go.aist.six.vuln.core.web.scap.nvd.HttpNvdRepositoryClient"> 
+        <property name="baseUrl" value="${six.vuln.web.scap.nvd.base-url}"/> 
+        <property name="httpClient" ref="http-client"/> 
+    </bean> 
+
+
+</beans>

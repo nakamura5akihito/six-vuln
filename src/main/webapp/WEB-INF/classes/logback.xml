@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- 
+  // Project SIX: VULN
+  // Logback Configuration
+  // @author    Akihito Nakamura, AIST
+  // @version   $Id: logback.xml 414 2013-03-05 04:39:59Z nakamura5akihito@gmail.com $
+-->
+
+<configuration debug="true">
+    <appender name="FILE" 
+        class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <append>true</append>
+        <encoder>
+            <pattern>%date{ISO8601} [%thread] %-5level %logger{0}:%-4line - %msg%n</pattern>
+            <!-- pattern>%date{ISO8601} [%thread] %-5level %logger{36}:%-4line - %msg%n</pattern -->
+        </encoder>
+        <file>${catalina.base}/logs/six-vuln.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy"> 
+            <!-- daily rollover --> 
+            <fileNamePattern>${catalina.base}/logs/six-vuln.%d{yyyy-MM-dd}.log</fileNamePattern> 
+            <maxHistory>10</maxHistory> 
+        </rollingPolicy>        
+    </appender>
+    
+    <appender name="STDOUT" 
+        class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+        <pattern>%date{ISO8601} [%thread] %-5level %logger{0}:%-4line - %msg%n</pattern>
+        <!-- pattern>%date{ISO8601} [%thread] %-5level %logger{36}:%-4line - %msg%n</pattern -->
+        </encoder>
+    </appender>
+    
+    <root level="DEBUG">
+        <appender-ref ref="FILE" />
+    </root>
+</configuration>
