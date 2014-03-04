@@ -15,7 +15,7 @@ public class CveList
 
 
     public static final String[]  XML_FILE_DIRS = new String[] {
-        "src/test/resources/cve_list/xml",
+        "src/test/resources/cve/xml",
     };
 
 }
