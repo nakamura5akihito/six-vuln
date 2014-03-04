@@ -5,6 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -60,6 +64,95 @@ public abstract class XmlTestBase
         File  unm_xml_file = new File( _getWorkingDir(), _UNMARSHALED_FILE_PREFIX_ + source_xml_file.getName() );
         return unm_xml_file;
     }
+
+
+
+    private Collection<File> _unzipXml(
+                    final File[] zip_files
+                    )
+                    throws Exception
+    {
+        if (zip_files == null  ||  zip_files.length == 0) {
+            return Collections.emptyList();
+        }
+
+        Collection<File>  all_xml_files = new ArrayList<File>();
+        for (File  zip_file : zip_files) {
+            Collection<File>  xml_files = _unzipXml( zip_file );
+            all_xml_files.addAll( xml_files );
+        }
+
+        return all_xml_files;
+    }
+
+
+    // filename: a.xml.zip
+    private Collection<File> _unzipXml(
+                    final File source_zip_file
+                    )
+                    throws Exception
+    {
+        ZipFile  zip_file = new ZipFile( source_zip_file );
+        Collection<File>  xml_files = new ArrayList<File>();
+
+        try {
+            // (working_dir)/a.xml.zip/
+            String  zip_file_name = zip_file.getName();
+            File  unzip_dir = new File( _getWorkingDir(), zip_file_name );
+            unzip_dir.mkdirs();
+
+            Enumeration<? extends ZipEntry>  zip_entries = zip_file.entries();
+            while (zip_entries.hasMoreElements()) {
+                ZipEntry  zip_entry = zip_entries.nextElement();
+                String  zip_entry_name = zip_entry.getName();
+                System.out.println( "zip entry: " + zip_entry_name );
+                if (zip_entry_name.endsWith( "/" )) {
+                    File  unzip_subdir = new File( unzip_dir, zip_entry_name );
+                    unzip_subdir.mkdirs();
+                    // (working_dir)/a.xml.zip/x/y/z/
+                } else if (zip_entry_name.endsWith( ".xml" )) {
+                    File  output_file = new File( unzip_dir, zip_entry_name );
+                    InputStream  zip_entry_is = zip_file.getInputStream( zip_entry );
+                    IoUtil.copy( zip_entry_is, output_file );
+                    xml_files.add( output_file );
+                    // (working_dir)/a.xml.zip/x/y/z/p.xml
+                }
+            }
+        } finally {
+            try {
+                zip_file.close();
+            } catch (IOException ex) {
+                //negligible
+            }
+        }
+
+        return xml_files;
+    }
+
+
+
+    protected Collection<File> _prepareSourceXmlFiles(
+                    final File source_dir
+                    )
+    throws Exception
+    {
+        System.out.println( "source dir: " + source_dir );
+
+        Collection<File>  all_xml_files = new ArrayList<File>();
+
+        File[]  xml_file_list = TestUtil.listXmlFiles( source_dir );
+        all_xml_files.addAll( Arrays.asList( xml_file_list ) );
+
+        File[]  zip_file_list = TestUtil.listZipXmlFiles( source_dir );
+        for (File  zip_file : zip_file_list) {
+            Collection<File>  xml_files = _unzipXml( zip_file );
+            all_xml_files.addAll( xml_files );
+        }
+
+        return all_xml_files;
+    }
+
+
 
 
     // ZIP or JAR file

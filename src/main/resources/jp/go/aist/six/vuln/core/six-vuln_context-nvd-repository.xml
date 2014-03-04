@@ -72,16 +72,51 @@
     </bean>
 
 
+    <!-- ************************************************************** -->
+    <!-- *  Repository                                                * -->
+    <!-- ************************************************************** -->
+
+    <bean id="mongo-client" 
+        class="com.mongodb.MongoClient">
+        <constructor-arg type="java.lang.String" value="${six.vuln.repository.database.host}"/>
+        <constructor-arg type="int" value="${six.vuln.repository.database.port}"/>
+    </bean> 
+
+    <bean id="morphia-factory" 
+        class="jp.go.aist.six.util.core.repository.morphia.MorphiaFactory"> 
+        <constructor-arg>
+            <set><!-- classes to map -->
+                <!-- value>#{ T(jp.go.aist.six.oval.model.definitions.DefinitionType) }</value -->
+            </set>
+        </constructor-arg>
+        <constructor-arg>
+            <set><!-- converters -->
+                <!-- value>#{ T(jp.go.aist.six.oval.core.repository.morphia.OvalConverter) }</value -->
+            </set>
+        </constructor-arg>
+
+        <property name="mongoClient" ref="mongo-client"/>
+    </bean>
+
+    <bean id="morphia-datastore" 
+        factory-bean="morphia-factory" 
+        factory-method="createDatastore"> 
+        <constructor-arg value="${six.vuln.repository.database.name}"/>
+        <constructor-arg value="${six.vuln.repository.database.username}"/>
+        <constructor-arg value="${six.vuln.repository.database.password}"/>
+    </bean>
+
+
     <bean id="vulnerabilityDAO" 
         class="jp.go.aist.six.vuln.core.repository.scap.nvd.morphia.VulnerabilityDAO">
-        <constructor-arg ref="morphiaDatastore"/> 
+        <constructor-arg ref="morphia-datastore"/> 
     </bean>
 
 <!-- TODO: cpe-dic 
 -->
     <bean id="cpeItemDAO" 
         class="jp.go.aist.six.vuln.core.repository.scap.nvd.morphia.CpeItemDAO">
-        <constructor-arg ref="morphiaDatastore"/> 
+        <constructor-arg ref="morphia-datastore"/> 
     </bean>
 
 
