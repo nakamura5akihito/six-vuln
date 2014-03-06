@@ -9,23 +9,23 @@ import jp.go.aist.six.vuln.repository.scap.nvd.VulnerabilityQueryParams;
 public class NvdRepositoryQuery
 {
 
-    public static final String[]  NONEXISTENT_CVE_IDS = {
-        "CVE-0000-0000",
-        "CVE-2010-0000"
+    public static final String[]  NONEXISTENT_VULN_IDS = {
+        "SIX-0000-0000",
+        "SIX-2014-0000"
     };
 
 
 
-    public static final String[]  CVE_ID_PATTERNS = {
-        "CVE-*",
-        "CVE-2010-*",
-        "CVE-2010-000*"
+    public static final String[]  VULN_ID_PATTERNS = {
+        "SIX-*",
+        "SIX-2014-*",
+        "SIX-2014-000*"
     };
 
-    public static Collection<VulnerabilityQueryParams> CVE_ID_PATTERN_PARAMS()
+    public static Collection<VulnerabilityQueryParams> vulnIdPatternParams()
     {
         Collection<VulnerabilityQueryParams>  params_list = new ArrayList<VulnerabilityQueryParams>();
-        for (String  pattern : CVE_ID_PATTERNS) {
+        for (String  pattern : VULN_ID_PATTERNS) {
             VulnerabilityQueryParams  params = new VulnerabilityQueryParams();
             params.setCve( pattern );
             params_list.add( params );
@@ -40,7 +40,7 @@ public class NvdRepositoryQuery
         "9.7,10.0"
     };
 
-    public static Collection<VulnerabilityQueryParams> CVSS_PATTERN_PARAMS()
+    public static Collection<VulnerabilityQueryParams> cvssPatternParams()
     {
         Collection<VulnerabilityQueryParams>  params_list = new ArrayList<VulnerabilityQueryParams>();
         for (String  pattern : CVSS_PATTERNS) {

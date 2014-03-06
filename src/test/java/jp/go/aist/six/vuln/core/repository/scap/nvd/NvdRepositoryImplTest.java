@@ -4,8 +4,10 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import jp.go.aist.six.util.repository.ObjectNotFoundException;
 import jp.go.aist.six.vuln.NvdRepositoryQuery;
+import jp.go.aist.six.vuln.core.NvdRepositoryTestDataInstaller;
 import jp.go.aist.six.vuln.core.SixVulnContext;
 import jp.go.aist.six.vuln.repository.scap.nvd.NvdRepository;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.experimental.theories.DataPoints;
@@ -48,6 +50,14 @@ public class NvdRepositoryImplTest
     }
 
 
+    @Before
+    public void setUp()
+    throws Exception
+    {
+        NvdRepositoryTestDataInstaller.execute();
+    }
+
+
 
     /**
      */
@@ -63,7 +73,7 @@ public class NvdRepositoryImplTest
         @DataPoints
         public static String[] nonexistentCveIds()
         {
-            return NvdRepositoryQuery.NONEXISTENT_CVE_IDS;
+            return NvdRepositoryQuery.NONEXISTENT_VULN_IDS;
         }
 
 

@@ -24,7 +24,7 @@ public class NvdDataFeed
 
 
     public static final String[]  SOURCE_XML_DIRS = new String[] {
-        "src/test/resources/nvd/xml"
+        "src/test/resources/nvd/xml/nist"
     };
 
 
