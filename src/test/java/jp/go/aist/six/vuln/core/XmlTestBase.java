@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -67,23 +66,23 @@ public abstract class XmlTestBase
 
 
 
-    private Collection<File> _unzipXml(
-                    final File[] zip_files
-                    )
-                    throws Exception
-    {
-        if (zip_files == null  ||  zip_files.length == 0) {
-            return Collections.emptyList();
-        }
-
-        Collection<File>  all_xml_files = new ArrayList<File>();
-        for (File  zip_file : zip_files) {
-            Collection<File>  xml_files = _unzipXml( zip_file );
-            all_xml_files.addAll( xml_files );
-        }
-
-        return all_xml_files;
-    }
+//    private Collection<File> _unzipXml(
+//                    final File[] zip_files
+//                    )
+//                    throws Exception
+//    {
+//        if (zip_files == null  ||  zip_files.length == 0) {
+//            return Collections.emptyList();
+//        }
+//
+//        Collection<File>  all_xml_files = new ArrayList<File>();
+//        for (File  zip_file : zip_files) {
+//            Collection<File>  xml_files = _unzipXml( zip_file );
+//            all_xml_files.addAll( xml_files );
+//        }
+//
+//        return all_xml_files;
+//    }
 
 
     // filename: a.xml.zip
