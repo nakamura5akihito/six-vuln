@@ -25,6 +25,21 @@ public class NvdRepositoryQuery
 //  SIX-2014-0022 5.0
 
 
+//  Test data: 20140303_nvdcve-2.0-2014_six.xml
+//
+//  Vuln ID       CVSS
+//  SIX-2014-0001 7.5
+//  SIX-2014-0006 4.3
+//  SIX-2014-0008 4.0
+//  SIX-2014-0009 5.5
+//  SIX-2014-0010 6.8
+//  SIX-2014-0015 4.0
+//  SIX-2014-0018 1.9
+//  SIX-2014-0019 1.9
+//  SIX-2014-0020 5.0
+//  SIX-2014-0022 5.0
+
+
     public static final String[]  EXISTENT_VULN_IDS = {
         "SIX-2014-0001",
         "SIX-2014-0006",
@@ -78,7 +93,6 @@ public class NvdRepositoryQuery
             this.count = count;
         }
     }
-
 
 
 
