@@ -113,7 +113,7 @@ public class NvdRepositoryController
 
     /**
      */
-    public void setNvdXmlmapper(
+    public void setNvdXmlMapper(
                     final XmlMapper xml_mapper
                     )
     {
