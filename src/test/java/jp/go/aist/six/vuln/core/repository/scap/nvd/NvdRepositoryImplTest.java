@@ -135,7 +135,7 @@ public class NvdRepositoryImplTest
 
 
         @Theory
-        public void testFindVulnerabilityById(
+        public void testFindVulnerability(
                         final QueryParamsAndCount params_and_count
                         )
         {
@@ -158,7 +158,7 @@ public class NvdRepositoryImplTest
     /**
      */
     @RunWith( Theories.class )
-    public static class Cvss
+    public static class CvssScore
     extends NvdRepositoryImplTest
     {
         @DataPoints
@@ -169,7 +169,7 @@ public class NvdRepositoryImplTest
 
 
         @Theory
-        public void testFindVulnerabilityById(
+        public void testFindVulnerability(
                         final QueryParamsAndCount params_and_count
                         )
         {
