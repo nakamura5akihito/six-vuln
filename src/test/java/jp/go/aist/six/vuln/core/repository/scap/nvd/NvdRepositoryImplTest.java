@@ -3,10 +3,14 @@ package jp.go.aist.six.vuln.core.repository.scap.nvd;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import jp.go.aist.six.util.repository.ObjectNotFoundException;
+import jp.go.aist.six.util.repository.QueryResults;
 import jp.go.aist.six.vuln.NvdRepositoryQuery;
+import jp.go.aist.six.vuln.NvdRepositoryQuery.PatternAndCount;
 import jp.go.aist.six.vuln.core.NvdRepositoryTestDataInstaller;
 import jp.go.aist.six.vuln.core.SixVulnContext;
+import jp.go.aist.six.vuln.model.scap.vulnerability.VulnerabilityType;
 import jp.go.aist.six.vuln.repository.scap.nvd.NvdRepository;
+import jp.go.aist.six.vuln.repository.scap.nvd.VulnerabilityQueryParams;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.experimental.runners.Enclosed;
@@ -65,13 +69,8 @@ public class NvdRepositoryImplTest
     public static class NonexistentId
     extends NvdRepositoryImplTest
     {
-        public NonexistentId()
-        {
-        }
-
-
         @DataPoints
-        public static String[] nonexistentCveIds()
+        public static String[] vulnIds()
         {
             return NvdRepositoryQuery.NONEXISTENT_VULN_IDS;
         }
@@ -82,12 +81,48 @@ public class NvdRepositoryImplTest
 
 
         @Theory
-        public void testFindVulnerabilityByNonexistentId(
+        public void testFindVulnerabilityById(
                         final String id
                         )
         {
             expectedEx.expect( ObjectNotFoundException.class );
             _getRepository().findVulnerabilityById( id );
+        }
+
+    }
+    //
+
+
+
+    /**
+     */
+    @RunWith( Theories.class )
+    public static class VulnIdPattern
+    extends NvdRepositoryImplTest
+    {
+        @DataPoints
+        public static PatternAndCount[] vulnIdPatternsAndCounts()
+        {
+            return NvdRepositoryQuery.VULN_ID_PATTERNS_AND_COUNTS;
+        }
+
+
+        @Theory
+        public void testFindVulnerabilityById(
+                        final PatternAndCount id_pattern_and_count
+                        )
+        {
+            VulnerabilityQueryParams  params = new VulnerabilityQueryParams();
+            params.setId( id_pattern_and_count.pattern );
+            System.out.println( "query: " + params );
+
+            QueryResults<VulnerabilityType>  results = _getRepository().findVulnerability( params );
+            System.out.println( "  result: #entries=" + results.size() );
+            assertThat( results.size(), is( id_pattern_and_count.count ) );
+            for (VulnerabilityType  v : results.getElements()) {
+                System.out.println( "    vulnerability: id=" + v.getId() + ", cve=" + v.getCveId() );
+//                assertThat( v.getCveId().substring( 0, 12 ), is( "CVE-2013-000" ) );
+            }
         }
 
     }

@@ -16,23 +16,36 @@ public class NvdRepositoryQuery
 
 
 
-    public static final String[]  VULN_ID_PATTERNS = {
-        "SIX-*",
-        "SIX-2014-*",
-        "SIX-2014-000*"
+    public static final class PatternAndCount
+    {
+        public final String  pattern;
+        public final int  count;
+
+        public PatternAndCount( final String pattern, final int count )
+        {
+            this.pattern = pattern;
+            this.count = count;
+        }
+    }
+
+
+    public static final PatternAndCount[]  VULN_ID_PATTERNS_AND_COUNTS = {
+        new PatternAndCount( "SIX-*",         10 ),
+        new PatternAndCount( "SIX-2014-*",    10 ),
+        new PatternAndCount( "SIX-2014-000*",  4 )
     };
 
-    public static Collection<VulnerabilityQueryParams> vulnIdPatternParams()
-    {
-        Collection<VulnerabilityQueryParams>  params_list = new ArrayList<VulnerabilityQueryParams>();
-        for (String  pattern : VULN_ID_PATTERNS) {
-            VulnerabilityQueryParams  params = new VulnerabilityQueryParams();
-            params.setCve( pattern );
-            params_list.add( params );
-        }
-
-        return params_list;
-    }
+//    public static Collection<VulnerabilityQueryParams> vulnIdPatternParams()
+//    {
+//        Collection<VulnerabilityQueryParams>  params_list = new ArrayList<VulnerabilityQueryParams>();
+//        for (String  pattern : VULN_ID_PATTERNS) {
+//            VulnerabilityQueryParams  params = new VulnerabilityQueryParams();
+//            params.setCve( pattern );
+//            params_list.add( params );
+//        }
+//
+//        return params_list;
+//    }
 
 
 
