@@ -6,6 +6,7 @@ import jp.go.aist.six.util.repository.ObjectNotFoundException;
 import jp.go.aist.six.util.repository.QueryResults;
 import jp.go.aist.six.vuln.NvdRepositoryQuery;
 import jp.go.aist.six.vuln.NvdRepositoryQuery.PatternAndCount;
+import jp.go.aist.six.vuln.NvdRepositoryQuery.QueryParamsAndCount;
 import jp.go.aist.six.vuln.core.NvdRepositoryTestDataInstaller;
 import jp.go.aist.six.vuln.core.SixVulnContext;
 import jp.go.aist.six.vuln.model.scap.vulnerability.VulnerabilityType;
@@ -127,6 +128,40 @@ public class NvdRepositoryImplTest
 
     }
     //
+
+
+
+    /**
+     */
+    @RunWith( Theories.class )
+    public static class Cvss
+    extends NvdRepositoryImplTest
+    {
+        @DataPoints
+        public static QueryParamsAndCount[] vulnIdPatternsAndCounts()
+        {
+            return NvdRepositoryQuery.cvssParamsAndCount().toArray( new QueryParamsAndCount[0] );
+        }
+
+
+        @Theory
+        public void testFindVulnerabilityById(
+                        final QueryParamsAndCount params_and_count
+                        )
+        {
+            System.out.println( "query: " + params_and_count.params );
+
+            QueryResults<VulnerabilityType>  results = _getRepository().findVulnerability( params_and_count.params );
+            System.out.println( "  result: #entries=" + results.size() );
+            assertThat( results.size(), is( params_and_count.count ) );
+            for (VulnerabilityType  v : results.getElements()) {
+                System.out.println( "    vulnerability: id=" + v.getId() + ", cvss=" + v.getCvss().getBaseMetrics().getScore() );
+            }
+        }
+
+    }
+    //
+
 
 }
 //
