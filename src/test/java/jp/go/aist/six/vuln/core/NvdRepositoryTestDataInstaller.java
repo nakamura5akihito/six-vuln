@@ -13,21 +13,21 @@ public class NvdRepositoryTestDataInstaller
     public static final NvdRepositoryTestDataInstaller  INSTANCE = new NvdRepositoryTestDataInstaller();
 
 
-    public static void execute()
+    public static void installNvd()
     throws Exception
     {
-        INSTANCE._execute();
+        INSTANCE._installNvd();
     }
 
 
 
 
-    public static final String[]  SOURCE_XML_DIRS = new String[] {
+    public static final String[]  NVD_SOURCE_XML_DIRS = new String[] {
         "src/test/resources/nvd/xml/six"
     };
 
 
-    private boolean  _installed = false;
+    private boolean  _nvdInstalled = false;
 
 
 
@@ -37,22 +37,22 @@ public class NvdRepositoryTestDataInstaller
 
 
 
-    private synchronized void _execute()
+    private synchronized void _installNvd()
                     throws Exception
     {
-        if (_installed) {
+        if (_nvdInstalled) {
             return;
         }
 
         NvdDataFeedInstaller  installer = new NvdDataFeedInstaller();
-        for (String  dir_path : SOURCE_XML_DIRS) {
+        for (String  dir_path : NVD_SOURCE_XML_DIRS) {
             File[]  xml_file_list = TestUtil.listXmlFiles( dir_path );
             for (File  xml_file : xml_file_list) {
                 installer.execute( new String[] { xml_file.getCanonicalPath() } );
             }
         }
 
-        _installed = true;
+        _nvdInstalled = true;
     }
 
 }

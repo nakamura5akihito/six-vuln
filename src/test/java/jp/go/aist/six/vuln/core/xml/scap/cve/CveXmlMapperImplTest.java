@@ -36,7 +36,7 @@ public class CveXmlMapperImplTest
         @DataPoints
         public static String[] cveListFileDirs()
         {
-            return CveList.XML_FILE_DIRS;
+            return CveList.SOURCE_XML_DIRS;
         }
 
 

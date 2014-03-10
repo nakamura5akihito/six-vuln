@@ -57,7 +57,7 @@ public class NvdRepositoryImplTest
     public void setUp()
     throws Exception
     {
-        NvdRepositoryTestDataInstaller.execute();
+        NvdRepositoryTestDataInstaller.installNvd();
     }
 
 
