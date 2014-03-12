@@ -10,7 +10,7 @@ Project SIX: VULN - Maven Project Object Model (POM)
     <modelVersion>4.0.0</modelVersion>
     <groupId>jp.go.aist.six.vuln</groupId>
     <artifactId>six-vuln</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <parent>
