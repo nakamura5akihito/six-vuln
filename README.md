@@ -16,6 +16,9 @@ The features included are:
 * Object-XML and Object-Database Mappings
 * RESTful Web Service Utilities
 
+The product JAR is available from the Maven Central, thanks to 
+[Sonatype OSS Repository Hosting](https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide).
+
 
 # License
 SIX VULN is free and open source software, licensed under the 
