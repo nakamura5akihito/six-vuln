@@ -467,6 +467,7 @@ Project SIX: VULN - Maven Project Object Model (POM)
                     <outputEncoding>${project.build.sourceEncoding}</outputEncoding>
                 </configuration>
                 -->
+                <!-- deprecated: old Google Code hosting.
                 <dependencies>
                     <dependency>
                         <groupId>com.google.code.maven-svn-wagon</groupId>
@@ -474,6 +475,7 @@ Project SIX: VULN - Maven Project Object Model (POM)
                         <version>1.4</version>
                     </dependency>
                 </dependencies>
+                -->
             </plugin>
 
             <plugin>
