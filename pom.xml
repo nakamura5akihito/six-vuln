@@ -516,6 +516,15 @@ Project SIX: VULN - Maven Project Object Model (POM)
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${maven-war-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-war</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <!-- Querydsl ...pending
