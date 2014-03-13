@@ -20,6 +20,10 @@ The product JAR is available from the Maven Central, thanks to
 [Sonatype OSS Repository Hosting](https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide).
 
 
+# Documents
+* [Project information, including Javadoc](http://nakamura5akihito.github.io/six-vuln/)
+
+
 # License
 SIX VULN is free and open source software, licensed under the 
 [Apache License, Version 2.0](http://www.apache.org/licenses/), 

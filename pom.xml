@@ -70,6 +70,7 @@ Project SIX: VULN - Maven Project Object Model (POM)
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <github.global.server>github</github.global.server>
 
         <!-- Maven plugins -->
         <maven-ant-plugin.version>2.3</maven-ant-plugin.version>
@@ -84,6 +85,7 @@ Project SIX: VULN - Maven Project Object Model (POM)
         <maven-site-plugin.version>3.3</maven-site-plugin.version>
         <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
         <maven-war-plugin.version>2.3</maven-war-plugin.version>
+        <com.github.github.site-maven-plugin.version>0.9</com.github.github.site-maven-plugin.version>
         <com.mycila.maven-license-plugin.version>1.9.0</com.mycila.maven-license-plugin.version>
 
         <!-- Java libraries -->
@@ -423,6 +425,23 @@ Project SIX: VULN - Maven Project Object Model (POM)
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>${com.github.github.site-maven-plugin.version}</version>
+                <configuration>
+                    <message>Creating site for ${project.version}</message>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <phase>site</phase>
+                    </execution>
+                </executions>
+            </plugin>
+    
             <!-- Appends license header in source code. -->
             <!-- Usage: mvn license:{format, remove} -Dxxx=yyy -->
             <plugin>
@@ -532,7 +551,7 @@ Project SIX: VULN - Maven Project Object Model (POM)
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven-javadoc-plugin.version}</version>
                 <configuration>
-                    <source>1.5</source>
+                    <!-- source>1.5</source -->
                     <author>true</author>
                     <version>true</version>
                     <use>true</use>
