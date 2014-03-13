@@ -19,9 +19,18 @@ The features included are:
 The product JAR is available from the Maven Central, thanks to 
 [Sonatype OSS Repository Hosting](https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide).
 
+```xml
+<dependency>
+    <groupId>jp.go.aist.six.vuln</groupId>
+    <artifactId>six-vuln</artifactId>
+    <version>1.2.0</version>
+</dependency>
+```
 
 # Documents
 * [Project information, including Javadoc](http://nakamura5akihito.github.io/six-vuln/)
+* [User Guide](https://code.google.com/p/six-vuln/wiki/UserGuide_1_0) (T.B.D)
+* Release Notes (T.B.D)
 
 
 # License
