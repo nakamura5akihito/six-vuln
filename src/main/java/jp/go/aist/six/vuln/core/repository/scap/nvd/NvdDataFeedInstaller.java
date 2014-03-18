@@ -24,16 +24,11 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import jp.go.aist.six.util.xml.XmlMapper;
 import jp.go.aist.six.vuln.core.SixVulnContext;
 import jp.go.aist.six.vuln.model.scap.nvd.Nvd;
 import jp.go.aist.six.vuln.model.scap.vulnerability.VulnerabilityType;
+import jp.go.aist.six.vuln.repository.scap.nvd.NvdDataFeed;
 import jp.go.aist.six.vuln.repository.scap.nvd.NvdRepository;
 
 
@@ -45,7 +40,7 @@ import jp.go.aist.six.vuln.repository.scap.nvd.NvdRepository;
  * <p>Options:
  * </p>
  * <ul>
- *   <li>-2002, -2003,..., -2013, -recent, -modified:
+ *   <li>-2002, -2003,..., -2014, -recent, -modified:
  *   Obtains data feed(s) from NIST. Each option indicates the data file.
  *   </li>
  *   <li>URL(s):
@@ -95,17 +90,18 @@ public class NvdDataFeedInstaller
     {
         _printMessage( _START_MESSAGE_ );
 
-        String[]  feed_list = feed_options;
+        String[]  data_feed_list = feed_options;
         if (feed_options == null  ||  feed_options.length == 0) {
-            feed_list = getAllYearlyXmlFeedUrls().toArray( new String[0] );
+            data_feed_list = NvdDataFeed.listYearlyXmlFeedUrls().toArray( new String[0] );
+//            feed_list = getAllYearlyXmlFeedUrls().toArray( new String[0] );
         }
 
-        for (String  feed : feed_list) {
-            _printMessage( "*** install: " + feed );
+        for (String  data_feed : data_feed_list) {
+            _printMessage( "*** install: " + data_feed );
             try {
-                _install( feed );
+                _install( data_feed );
             } catch (Exception ex) {
-                _printMessage( "@@@ ERROR: " + feed + " - " + ex.getMessage() );
+                _printMessage( "@@@ ERROR: " + data_feed + " - " + ex.getMessage() );
                 ex.printStackTrace( _msg_stream );
                 _printMessage( "" );
 //                _printMessage( "...skip" );
@@ -119,31 +115,31 @@ public class NvdDataFeedInstaller
      * Installs the XML Feed to the data store.
      * The location of the Feed is a file path or URL.
      *
-     * @param   feed
+     * @param   data_feed
      *  the location of the XML Feed.
      * @return
      *  the persistent ID of the installed Nvd object.
      */
     private void _install(
-                    final String feed
+                    final String data_feed
                     )
     throws Exception
     {
-        if (feed.startsWith( "-" )) {
-            String  feed_type = feed.substring( 1 );
-            String  url = buildXmlFeedUrl( feed_type );
+        if (data_feed.startsWith( "-" )) {
+            String  feed_id = data_feed.substring( 1 );
+            String  url = NvdDataFeed.buildXmlFeedUrl( feed_id );
             _install( new URL( url ) );
         } else {
             URL  url = null;
             try {
-                url = new URL( feed );
+                url = new URL( data_feed );
             } catch (MalformedURLException ex) {
                 url = null;
             }
 
             if (url == null) {
                 //local filepath
-                File  file = new File( feed );
+                File  file = new File( data_feed );
                 _install( file );
             } else {
                 _install( url );
@@ -156,17 +152,17 @@ public class NvdDataFeedInstaller
     /**
      * Installs the XML Feed to the data store.
      *
-     * @param   file
+     * @param   data_feed_file
      *  the file containing the XML Feed.
      * @return
      *  the persistent ID of the installed Nvd object.
      */
     private void _install(
-                    final File file
+                    final File data_feed_file
                     )
     throws Exception
     {
-        _install( file.getCanonicalPath(), new FileInputStream( file ) );
+        _install( data_feed_file.getCanonicalPath(), new FileInputStream( data_feed_file ) );
     }
 
 
@@ -174,17 +170,17 @@ public class NvdDataFeedInstaller
     /**
      * Installs the XML Feed to the data store.
      *
-     * @param   url
+     * @param   data_feed_url
      *  the URL of the XML Feed.
      * @return
      *  the persistent ID of the installed Nvd object.
      */
     private void _install(
-                    final URL url
+                    final URL data_feed_url
                     )
     throws Exception
     {
-        _install( url.toString(), url.openStream() );
+        _install( data_feed_url.toString(), data_feed_url.openStream() );
     }
 
 
@@ -192,31 +188,30 @@ public class NvdDataFeedInstaller
     /**
      * Installs the XML Feed to the data store.
      *
-     * @param   stream
+     * @param   xml_stream
      *  the stream which the XML Feed is read from.
      * @return
      *  the persistent ID of the installed Nvd object.
      */
     private void _install(
-                    final String source,
-                    final InputStream stream
+                    final String data_feed_name,
+                    final InputStream xml_stream
                     )
     throws Exception
     {
-        _printMessage( "install NVD Data Feed: " + source );
+        _printMessage( "install NVD Data Feed: " + data_feed_name );
 
-        XmlMapper  xml = SixVulnContext.Nvd.repository().getXmlMapper();
-        NvdRepository  service = SixVulnContext.Nvd.repository().getRepository();
-//        NvdVulnerabilityRepository  repository = VulnContext.server().getNvdVulnerabilityRepository();
+        XmlMapper  xml_mapper = SixVulnContext.Nvd.repository().getXmlMapper();
+        NvdRepository  repository = SixVulnContext.Nvd.repository().getRepository();
 
         long  timestamp_begin, timestamp_end;
 
         _printMessage( "unmarshalling XML..." );
         timestamp_begin = System.currentTimeMillis();
-        Nvd  nvd = xml.unmarshal( stream, Nvd.class );
+        Nvd  nvd = xml_mapper.unmarshal( xml_stream, Nvd.class );
         timestamp_end = System.currentTimeMillis();
-        _printMessage( "...unmarshalling DONE: "
-                        + (timestamp_end - timestamp_begin) + " (ms), " + source );
+        _printMessage( "...unmarshalling done: "
+                        + (timestamp_end - timestamp_begin) + " (ms), " + data_feed_name );
 
 //        String  pubDate = IsoDate.format( nvd.getPubDate() );
         _printMessage( "  - pub_date=" +  nvd.getPubDate() );
@@ -226,245 +221,101 @@ public class NvdDataFeedInstaller
         timestamp_begin = System.currentTimeMillis();
         for (VulnerabilityType  v : nvd.getEntry()) {
             _printMessage( "saving vulnerability entry: id=" + v.getId() );
-            service.saveVulnerability( v );
+            repository.saveVulnerability( v );
         }
         timestamp_end = System.currentTimeMillis();
         _printMessage( "...installation of NVD Data Feed COMPLETED: "
-                        + (timestamp_end - timestamp_begin) + " (ms), " + source );
+                        + (timestamp_end - timestamp_begin) + " (ms), " + data_feed_name );
     }
-//    private void _install(
-//                    final InputStream stream
-//                    )
-//    throws Exception
-//    {
-//        XmlMapper  mapper = VulnContext.instance().getXmlMapper();
-//        NvdService  service = VulnContext.instance().getNvdService();
-//        _printMessage( "unmarshalling XML Feed..." );
-//        Nvd  nvd = mapper.unmarshal( stream, Nvd.class );
-//        _printMessage( "...unmarshalling DONE" );
+
+
+
+//    //=====================================================================
+//    //  NVD/CVE XML Feed
+//    //=====================================================================
 //
-////        String  pubDate = IsoDate.format( nvd.getPubDate() );
-//        String  pubDate = nvd.getPubDate();
-//        _printMessage( "  - pub_date=" +  pubDate );
-//        _printMessage( "  - nvd_xml_version=" + nvd.getNvdXmlVersion() );
-//        _printMessage( "  - #entries=" + nvd.getEntry().size() );
+//    public static final String  RECENT_FEED_TYPE = "recent";
+//    public static final String  MODIFIED_FEED_TYPE = "modified";
+//    public static final int  MINIMUM_FEED_YEAR = 2002;
 //
-//        for (VulnerabilityType  v : nvd.getEntry()) {
-//            _printMessage( "saving vulnerability: id=" + v.getId() );
-//            service.saveVulnerability( v );
-//        }
-//        _printMessage( "...installation COMPLETED" );
-//    }
-
-
-    //=====================================================================
-    //  NVD/CVE XML Feed
-    //=====================================================================
-
-    public static final String  RECENT_FEED_TYPE = "recent";
-    public static final String  MODIFIED_FEED_TYPE = "modified";
-    public static final int  MINIMUM_FEED_YEAR = 2002;
-
-    /**
-     */
-    private static Collection<String> _createYearlyFeedTypes()
-    {
-        final int  currentYear = Calendar.getInstance().get( Calendar.YEAR );
-        Collection<String>  types = new ArrayList<String>();
-        for (int  year = MINIMUM_FEED_YEAR; year <= currentYear; year++) {
-            types.add( String.valueOf( year ) );
-        }
-
-        return Collections.unmodifiableCollection( types );
-    }
-
-
-
-    /**
-     */
-    private static Collection<String> _createAllFeedTypes()
-    {
-        Collection<String>  types = new ArrayList<String>();
-        types.addAll( _createYearlyFeedTypes() );
-        types.add( RECENT_FEED_TYPE );
-        types.add( MODIFIED_FEED_TYPE );
-
-        return Collections.unmodifiableCollection( types );
-    }
-
-
-    private static Collection<String>  _ALL_FEED_TYPES_ = _createAllFeedTypes();
-
-
-
-    /**
-     * version 2.0 URL pattern.
-     * "{0}" is replaced by 4-digit years, "recent", or "modified".
-     */
-    public static final String  XML_FEED_URL_PATTERN
-    = "http://static.nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-{0}.xml";
-
-
-    /**
-     * Returns the URL of an XML Feed of the specified type.
-     * The type is one of: "recent", "modified", "2002", "2003",...
-     *
-     * @param   type
-     *  the XML Feed type.
-     * @return
-     *  the URL.
-     */
-    public String buildXmlFeedUrl(
-                    final String type
-                    )
-    {
-        if (_ALL_FEED_TYPES_.contains( type )) {
-            // OK
-        } else {
-            throw new IllegalArgumentException( "unknown XML Feed type: " + type );
-        }
-
-        return MessageFormat.format( XML_FEED_URL_PATTERN, type );
-    }
-
-
-
-    /**
-     * Returns the URLs of all the yearly Feeds; from 2002 to this year.
-     */
-    public List<String> getAllYearlyXmlFeedUrls()
-    {
-        List<String>  locations = new ArrayList<String>();
-
-        for (String  year : _createYearlyFeedTypes()) {
-            String  url = buildXmlFeedUrl( year );
-            locations.add( url );
-        }
-
-        return locations;
-    }
-
-
-
 //    /**
-//     * Returns the URLs of the XML Feeds specified by the command line arguments.
 //     */
-//    private List<String> _getXmlFeedUrls(
-//                    final String[] args
+//    private static Collection<String> _createYearlyFeedTypes()
+//    {
+//        final int  currentYear = Calendar.getInstance().get( Calendar.YEAR );
+//        Collection<String>  types = new ArrayList<String>();
+//        for (int  year = MINIMUM_FEED_YEAR; year <= currentYear; year++) {
+//            types.add( String.valueOf( year ) );
+//        }
+//
+//        return Collections.unmodifiableCollection( types );
+//    }
+//
+//
+//
+//    /**
+//     */
+//    private static Collection<String> _createAllFeedTypes()
+//    {
+//        Collection<String>  types = new ArrayList<String>();
+//        types.addAll( _createYearlyFeedTypes() );
+//        types.add( RECENT_FEED_TYPE );
+//        types.add( MODIFIED_FEED_TYPE );
+//
+//        return Collections.unmodifiableCollection( types );
+//    }
+//
+//
+//    private static Collection<String>  _ALL_FEED_TYPES_ = _createAllFeedTypes();
+//
+//
+//
+//    /**
+//     * version 2.0 URL pattern.
+//     * "{0}" is replaced by 4-digit years, "recent", or "modified".
+//     */
+//    public static final String  XML_FEED_URL_PATTERN
+//    = "http://static.nvd.nist.gov/feeds/xml/cve/nvdcve-2.0-{0}.xml";
+//
+//
+//    /**
+//     * Returns the URL of an XML Feed of the specified type.
+//     * The type is one of: "recent", "modified", "2002", "2003",...
+//     *
+//     * @param   type
+//     *  the XML Feed type.
+//     * @return
+//     *  the URL.
+//     */
+//    public String buildXmlFeedUrl(
+//                    final String type
 //                    )
 //    {
-//        final List<String>  locations = new ArrayList<String>();
+//        if (_ALL_FEED_TYPES_.contains( type )) {
+//            // OK
+//        } else {
+//            throw new IllegalArgumentException( "unknown XML Feed type: " + type );
+//        }
 //
-//        for (String  arg : args) {
-//            if (arg.startsWith( "-" )) {
-//                String  type = arg.substring( 1 );
-//                String  url = buildXmlFeedUrl( type );
-//                locations.add( url );
-//            } else {
-//                File  file = new File( arg );
-//                if (file.exists()) {
-//                    if (file.isFile()) {
-//                        _validateXmlFile( file );
-//                        locations.add( arg );
-//                    } else if (file.isDirectory()) {
-//                        locations.addAll( _collectXmlFilesInDir( file ) );
-//                    } else {
-//                        throw new IllegalArgumentException(
-//                                        "unsupported XML Feed file: " + arg );
-//                    }
-//                } else {
-//                    // Regard as URL.
-//                    try {
-//                        // URL validation
-//                        new URL( arg );
-//                        locations.add( arg );
-//                    } catch (MalformedURLException ex) {
-//                        throw new IllegalArgumentException(
-//                                        "malformed XML Feed URL: " + arg );
-//                    }
-//                }
-//            }
+//        return MessageFormat.format( XML_FEED_URL_PATTERN, type );
+//    }
+//
+//
+//
+//    /**
+//     * Returns the URLs of all the yearly Feeds; from 2002 to this year.
+//     */
+//    public List<String> getAllYearlyXmlFeedUrls()
+//    {
+//        List<String>  locations = new ArrayList<String>();
+//
+//        for (String  year : _createYearlyFeedTypes()) {
+//            String  url = buildXmlFeedUrl( year );
+//            locations.add( url );
 //        }
 //
 //        return locations;
 //    }
-
-
-
-    //=====================================================================
-    //  file processing
-    //=====================================================================
-
-//    /**
-//     * Validates the specified XML Feed file.
-//     * The file is valid if it exists, is a normal file, and can be read.
-//     */
-//    private void _validateXmlFile(
-//                    final File file
-//                    )
-//    {
-//        if (file.exists()  &&  file.isFile()  &&  file.canRead()) {
-//            // OK
-//        } else {
-//            throw new IllegalArgumentException(
-//                            "XML Feed file inexistent or read-protected: "
-//                            + file.getAbsolutePath() );
-//        }
-//    }
-
-
-
-//    /**
-//     */
-//    private Collection<String> _collectXmlFilesInDir(
-//                    final File dir
-//                    )
-//    {
-//        _printMessage( "*** collectiong XML Feed files in directory: "
-//                        + dir.getAbsolutePath() );
-//
-//        File[]  files = dir.listFiles( new XmlFilenameFilter() );
-//        if (files == null  ||  files.length == 0) {
-//            return Collections.emptyList();
-//        }
-//
-//        Collection<String>  path_list = new ArrayList<String>( files.length );
-//        for (File  file : files) {
-//            String  filepath = file.getAbsolutePath();
-//            try {
-//                _validateXmlFile( file );
-//                path_list.add( filepath );
-//                _printMessage( "  - file collected: " + filepath );
-//            } catch (Exception ex) {
-//                _printMessage( "@@@ WARNING: " + filepath + " - " + ex.getMessage() );
-//                _printMessage( "...skip" );
-//            }
-//        }
-//
-//        return path_list;
-//    }
-
-
-
-//    /**
-//     * A file name filter for XML files.
-//     * The XML files are identified using the ".xml" extension.
-//     */
-//    private static class XmlFilenameFilter
-//    implements FilenameFilter
-//    {
-//
-//        @Override
-//        public boolean accept(
-//                        final File dir,
-//                        final String name
-//                        )
-//        {
-//            return (name.endsWith( ".xml" )  ||  name.endsWith( ".XML" ));
-//        }
-//
-//    }
-//    // XmlFilenameFilter
 
 
 
@@ -475,9 +326,10 @@ public class NvdDataFeedInstaller
     private static final String[]  _START_MESSAGE_
     = new String[] {
         "------------------------------------------------",
-        "NVD XML Feed Installer, SIX VULN, version 1.0.0",
+        "NVD XML Feed Installer",
         "copyright (C) 2006-2010 AIST",
         "AIST Registered Number H18PRO-538",
+        "https://github.com/nakamura5akihito/six-vuln",
         "------------------------------------------------",
     };
 
@@ -506,20 +358,5 @@ public class NvdDataFeedInstaller
         }
     }
 
-
-
-//    /**
-//     */
-//    private void _printXmlFeedLocations(
-//                    final List<String> locations
-//                    )
-//    {
-//        _printMessage( "*** XML Feed to install: " );
-//        for (String  location : locations) {
-//            _printMessage( "  - " + location );
-//        }
-//        _printMessage( "\n" );
-//    }
-
 }
-//NvdXmlFeedInstaller
+//NvdDataFeedInstaller

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ====================================================================== -->
+<!-- Ant build file (http://ant.apache.org/) for Ant 1.6.2 or above.        -->
+<!-- ====================================================================== -->
+
+<project name="six-vuln" default="package" basedir=".">
+
+  <!-- ====================================================================== -->
+  <!-- Import maven-build.xml into the current project                        -->
+  <!-- ====================================================================== -->
+
+  <import file="maven-build.xml"/>
+
+
+
+    <!-- ************************************************************** -->
+    <!-- *  NVD XML Data Feed                                         * -->
+    <!-- ************************************************************** -->
+
+    <target name="nvd.install-all">
+        <record name="build.log" loglevel="verbose" />
+        <java
+            classname="jp.go.aist.six.vuln.core.repository.scap.nvd.NvdDataFeedInstaller"
+            fork="true"
+            maxmemory="256m"
+            >
+            <classpath>
+                <path refid="build.classpath"/>
+                <pathelement location="${maven.build.outputDir}"/>
+                <pathelement location="${maven.build.resourceDir.0}"/>
+                <pathelement location="${maven.build.testResourceDir.0}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <property name="nvd.xmldatafeed.dir" value="/var/tmp/NVD_20140311"/>
+    <target name="nvd.install-all-files">
+        <record name="build.log" loglevel="verbose" />
+        <java
+            classname="jp.go.aist.six.vuln.core.repository.scap.nvd.NvdDataFeedInstaller"
+            fork="true"
+            maxmemory="256m"
+            >
+            <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2002.xml"/>
+            <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2003.xml"/>
+            <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2004.xml"/>
+            <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2005.xml"/>
+            <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2006.xml"/>
+            <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2007.xml"/>
+            <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2008.xml"/>
+            <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2009.xml"/>
+            <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2010.xml"/>
+            <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2011.xml"/>
+            <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2012.xml"/>
+            <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2013.xml"/>
+            <classpath>
+                <path refid="build.classpath"/>
+                <pathelement location="${maven.build.outputDir}"/>
+                <pathelement location="${maven.build.resourceDir.0}"/>
+                <pathelement location="${maven.build.testResourceDir.0}"/>
+            </classpath>
+        </java>
+    </target>
+
+
+	  <!-- ====================================================================== -->
+	  <!-- Help target                                                            -->
+	  <!-- ====================================================================== -->
+
+  <target name="help">
+    <echo message="Please run: $ant -projecthelp"/>
+  </target>
+
+</project>
