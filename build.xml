@@ -23,7 +23,7 @@
         <java
             classname="jp.go.aist.six.vuln.core.repository.scap.nvd.NvdDataFeedInstaller"
             fork="true"
-            maxmemory="256m"
+            maxmemory="512m"
             >
             <classpath>
                 <path refid="build.classpath"/>
@@ -34,13 +34,13 @@
         </java>
     </target>
 
-    <property name="nvd.xmldatafeed.dir" value="/var/tmp/NVD_20140311"/>
+    <property name="nvd.xmldatafeed.dir" value="/var/tmp/NVD_20140326"/>
     <target name="nvd.install-all-files">
         <record name="build.log" loglevel="verbose" />
         <java
             classname="jp.go.aist.six.vuln.core.repository.scap.nvd.NvdDataFeedInstaller"
             fork="true"
-            maxmemory="256m"
+            maxmemory="512m"
             >
             <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2002.xml"/>
             <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2003.xml"/>
