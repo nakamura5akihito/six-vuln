@@ -34,7 +34,7 @@
         </java>
     </target>
 
-    <property name="nvd.xmldatafeed.dir" value="/var/tmp/NVD_20140326"/>
+    <property name="nvd.xmldatafeed.dir" value="/tmp/nvd_20140331"/>
     <target name="nvd.install-all-files">
         <record name="build.log" loglevel="verbose" />
         <java
@@ -54,6 +54,28 @@
             <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2011.xml"/>
             <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2012.xml"/>
             <arg value="${nvd.xmldatafeed.dir}/nvdcve-2.0-2013.xml"/>
+            <classpath>
+                <path refid="build.classpath"/>
+                <pathelement location="${maven.build.outputDir}"/>
+                <pathelement location="${maven.build.resourceDir.0}"/>
+                <pathelement location="${maven.build.testResourceDir.0}"/>
+            </classpath>
+        </java>
+    </target>
+
+
+    <!-- ************************************************************** -->
+    <!-- *  CVE List                                                  * -->
+    <!-- ************************************************************** -->
+    <property name="data.cve.dir" value="/tmp/cve_20140331"/>
+    <target name="cve.install-all-files">
+        <record name="build.log" loglevel="verbose" />
+        <java
+            classname="jp.go.aist.six.vuln.core.repository.scap.cve.CveListInstaller"
+            fork="true"
+            maxmemory="512m"
+            >
+            <arg value="${data.cve.dir}/allitems.xml"/>
             <classpath>
                 <path refid="build.classpath"/>
                 <pathelement location="${maven.build.outputDir}"/>
